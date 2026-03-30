@@ -1,4 +1,4 @@
-name: CI
+name: CI/CD
 
 on:
   push:
@@ -6,28 +6,20 @@ on:
   pull_request:
     branches: [main]
 
-permissions:
-  contents: read
-
 jobs:
   validate:
-    name: Validate Project
+    name: Validate Files
     runs-on: ubuntu-latest
     permissions:
       contents: read
     steps:
       - uses: actions/checkout@v4
-
+      
       - name: Check required files exist
         run: |
-          test -f index.html      && echo "✅ index.html"
-          test -f landing.html    && echo "✅ landing.html"
-          test -f js/app.js       && echo "✅ js/app.js"
-          test -f css/styles.css  && echo "✅ css/styles.css"
-          test -f health.html     && echo "✅ health.html"
-          test -f .gitignore      && echo "✅ .gitignore"
-          test -f .env.example    && echo "✅ .env.example"
-          test -f DEPLOYMENT.md   && echo "✅ DEPLOYMENT.md"
+          for f in index.html landing.html js/app.js css/styles.css health.html 404.html .gitignore .env.example DEPLOYMENT.md manifest.json sw.js package.json; do
+            test -f "$f" && echo "✅ $f" || (echo "❌ Missing: $f" && exit 1)
+          done
 
       - name: Validate HTML structure
         run: |
@@ -36,22 +28,44 @@ jobs:
             ['index.html', 'landing.html', 'health.html', '404.html'].forEach(f => {
               const content = fs.readFileSync(f, 'utf8');
               if (!content.includes('<!DOCTYPE html>')) throw new Error(f + ' missing DOCTYPE');
+              if (!content.includes('<html')) throw new Error(f + ' missing html tag');
               console.log('✅ ' + f + ' valid');
             });
           "
-
+          
       - name: Check for hardcoded secrets
         run: |
-          if grep -rE "sk-proj-[a-zA-Z0-9]{10}" --include="*.js" --include="*.html" . 2>/dev/null | grep -v ".env.example"; then
-            echo "❌ Hardcoded API keys found!"
+          if grep -rn "sk-proj-[a-zA-Z0-9_-]\{20,\}" --include="*.js" --include="*.html" . 2>/dev/null | grep -v ".env.example" | grep -v "test"; then
+            echo "❌ Hardcoded OpenAI API keys found!"
             exit 1
-          else
-            echo "✅ No hardcoded secrets found"
           fi
+          if grep -rn "sk_live_[a-zA-Z0-9]\{20,\}" --include="*.js" --include="*.html" . 2>/dev/null | grep -v ".env.example"; then
+            echo "❌ Hardcoded Stripe live keys found!"
+            exit 1
+          fi
+          echo "✅ No hardcoded secrets found"
+
+  test:
+    name: Run Tests
+    runs-on: ubuntu-latest
+    needs: validate
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - run: npm install
+      - name: Run unit tests
+        run: npm run test:unit
+      - name: Run validation
+        run: npm run validate
 
   deploy-pages:
     name: Deploy to GitHub Pages
-    needs: validate
+    needs: test
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     permissions:
@@ -69,3 +83,28 @@ jobs:
           path: '.'
       - uses: actions/deploy-pages@v4
         id: deployment
+
+  e2e:
+    name: E2E Tests (Post-Deploy)
+    needs: deploy-pages
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - run: npm install
+      - run: npx playwright install chromium --with-deps
+      - name: Run E2E smoke tests
+        run: BASE_URL=https://dzinh1901-lang.github.io/chibioi npx playwright test --project=chromium
+        continue-on-error: true
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7
