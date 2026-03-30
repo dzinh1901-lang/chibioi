@@ -1,6 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <!-- Backend configuration — update CHIBIOI_API_URL if using a custom domain -->
+  <script>
+    window.CHIBIOI_CONFIG = {
+      apiUrl: '/api/generate',
+      supabaseUrl: '', // Optionally set for client-side Supabase auth
+      version: '4.0.0'
+    };
+  </script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>✨ Chibi Creator — AI Chibi Character Generator</title>
