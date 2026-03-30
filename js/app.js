@@ -317,7 +317,10 @@ function AuthProvider({ children }) {
       // Match on exact email
       const found = data.data?.find(u => u.email === email.toLowerCase().trim());
       if (!found) return { success: false, error: 'No account found with that email.' };
-      // Verify password: stored as btoa(password) — same encoding used on register
+      // ⚠️ SECURITY WARNING: btoa() is Base64 encoding, NOT a cryptographic hash.
+      // Anyone with database read access can trivially decode all passwords.
+      // This MUST be replaced with a server-side bcrypt/Argon2 hash before handling
+      // any real user data. See docs/open-issues.md — Issue #1 (CRITICAL).
       if (found.passwordHash !== btoa(password)) return { success: false, error: 'Incorrect password.' };
       const u = { id: found.id, name: found.name, email: found.email, plan: found.plan || 'FREE' };
       setUser(u);
@@ -338,6 +341,10 @@ function AuthProvider({ children }) {
       const data = await api.get('users', { search: normEmail, limit: 100 });
       if (data.data?.find(u => u.email === normEmail)) return { success: false, error: 'Email already registered.' };
       // Create
+      // ⚠️ SECURITY WARNING: btoa() is Base64 encoding, NOT a cryptographic hash.
+      // Anyone with database read access can trivially decode all passwords.
+      // This MUST be replaced with a server-side bcrypt/Argon2 hash before handling
+      // any real user data. See docs/open-issues.md — Issue #1 (CRITICAL).
       const newRec = await api.post('users', { name: name.trim(), email: normEmail, passwordHash: btoa(password), plan: 'FREE', createdAt: Date.now() });
       const u = { id: newRec.id, name: newRec.name, email: newRec.email, plan: 'FREE' };
       setUser(u);
@@ -492,7 +499,11 @@ function buildChibiPromptLegacy(textPrompt, professionName, styleName, bgName, s
   return buildChibiPrompt(textPrompt, profData, styleObj, bgObj, softness, sparkle);
 }
 
-// Call OpenAI DALL-E to generate a chibi image — returns a data-URL string
+// ⚠️ WARNING: This function sends the OpenAI API key directly from the browser.
+// The key is stored in localStorage and included in client-side requests, making it
+// visible in browser DevTools and network traffic. For production, route all OpenAI
+// calls through a server-side proxy that keeps the key confidential.
+// See docs/open-issues.md — Issue #2 (CRITICAL).
 async function generateWithOpenAI(prompt, hdQuality = false) {
   const apiKey = getApiKey();
   if (!apiKey) throw new Error('NO_API_KEY');
@@ -904,9 +915,10 @@ function Navbar({ onLoginClick, onRegisterClick, activeSection, onOpenSettings }
   const planTextColors = { FREE: '#888', PRO: '#5A3E00', STUDIO: '#fff' };
 
   const navLinks = [
-    { label:'Create',   id:'studio'  },
-    { label:'Gallery',  id:'gallery' },
-    { label:'Pricing',  id:'pricing' },
+    { label:'Create',    id:'studio'  },
+    { label:'Gallery',   id:'gallery' },
+    { label:'My Avatar', id:'avatar'  },
+    { label:'Pricing',   id:'pricing' },
     { label:'How it Works', id:'ux' },
   ];
 
@@ -2280,6 +2292,298 @@ function AuthModal({ mode, onClose, onSwitch }) {
 }
 
 // =====================================================
+// AVATAR WIZARD — buildAvatarPrompt + AvatarWizard
+// =====================================================
+
+const AVATAR_GENDERS   = ['Girl', 'Boy', 'Non-binary'];
+const AVATAR_HAIR_COLORS = ['Black', 'Brown', 'Blonde', 'Red', 'Pink', 'Blue', 'Silver'];
+const AVATAR_HAIR_STYLES = ['Short', 'Long Wavy', 'Long Straight', 'Bun', 'Braided', 'Messy'];
+const AVATAR_EYE_COLORS  = ['Brown', 'Black', 'Blue', 'Green', 'Teal', 'Gold'];
+
+const AVATAR_OUTFITS = [
+  { id:'marching-band',    emoji:'🎺', label:'Marching Band',    desc:'Navy & gold uniform, white feather cap, trumpet',
+    prompt:'navy and gold marching band uniform with white feather cap, holding a polished brass trumpet, gold epaulettes and brass buttons, elegant parade stance' },
+  { id:'fine-dining',      emoji:'🍽️', label:'Fine Dining',      desc:'Dark red suit, white gloves, candles & wine',
+    prompt:'sophisticated dark red dinner jacket with white gloves, surrounded by elegant candlelit fine-dining atmosphere, crystal wine glasses, warm golden candlelight' },
+  { id:'doctor',           emoji:'👩‍⚕️', label:'Doctor / Nurse',   desc:'White coat, stethoscope, medical background',
+    prompt:'crisp white doctor coat with stethoscope around neck, name badge, clean modern hospital background with soft pastel lighting' },
+  { id:'pastry-chef',      emoji:'👨‍🍳', label:'Pastry Chef',      desc:'White chef hat, piping bag, bakery background',
+    prompt:'tall white chef hat, double-breasted chef coat, holding a pastry piping bag, warm artisanal bakery interior with glass cases of macarons and cakes' },
+  { id:'pilot',            emoji:'✈️', label:'Pilot',             desc:'White uniform, headset, cockpit background',
+    prompt:'crisp white aviation uniform with captain epaulettes and golden wings badge, wearing a pilot headset, detailed aircraft cockpit with instrument panels' },
+  { id:'romantic-dinner',  emoji:'🌅', label:'Romantic Dinner',   desc:'Casual elegant, sunset background, wine',
+    prompt:'casual elegant outfit, warm romantic sunset outdoor setting, golden hour bokeh, wine glass on table, soft amber and rose tones' },
+  { id:'kimono',           emoji:'🌸', label:'Kimono / Traditional', desc:'Pink floral kimono with obi belt',
+    prompt:'beautifully detailed pink floral kimono with ornate obi belt, cherry blossom petals drifting gently, serene Japanese garden background' },
+  { id:'casual-fashion',   emoji:'👗', label:'Casual Fashion',    desc:'Jeans, cozy sweater, warm bokeh background',
+    prompt:'stylish casual outfit with cozy sweater and jeans, warm soft bokeh background, relaxed and cheerful lifestyle vibe, golden-hour light' },
+  { id:'scientist',        emoji:'🔬', label:'Scientist',         desc:'Lab coat, microscope, laboratory',
+    prompt:'smart white lab coat with small glasses, surrounded by glowing holographic data, lab equipment including microscope, soft blue ambient laboratory light' },
+  { id:'engineer',         emoji:'👷', label:'Engineer / Builder', desc:'Work clothes, laptop, blueprints',
+    prompt:'professional work attire with yellow hard hat, holding rolled blueprints, modern engineering office with technical monitors displaying CAD designs' },
+];
+
+const AVATAR_BACKGROUNDS = [
+  { id:'cherry-blossom',  label:'Cherry Blossom Garden',  desc:'soft pink sakura petals, blurred branches' },
+  { id:'golden-glow',     label:'Soft Golden Glow',        desc:'warm bokeh orbs, peach and cream tones' },
+  { id:'moonlit',         label:'Moonlit Night',           desc:'full moon, indigo sky, scattered stars' },
+  { id:'festival-lights', label:'Festival Lights',         desc:'colorful lanterns, warm string lights' },
+  { id:'fantasy-castle',  label:'Fantasy Castle',          desc:'magical castle, floating sparkles, purple glow' },
+  { id:'laboratory',      label:'Laboratory',              desc:'glowing test tubes, blue ambient light' },
+  { id:'bakery',          label:'Kitchen / Bakery',        desc:'warm amber bakery, macarons in cases' },
+  { id:'cockpit',         label:'Cockpit',                 desc:'aircraft instruments, altitude view' },
+  { id:'sunset-harbor',   label:'Sunset Harbor',           desc:'golden harbor, warm water reflections' },
+  { id:'cloud-kingdom',   label:'Cloud Kingdom',           desc:'soft fluffy clouds, pale blue sky' },
+];
+
+const AVATAR_ART_STYLES = [
+  { id:'polished-anime',  label:'Polished Anime',   desc:'clean linework, cel-shaded, luminous eyes' },
+  { id:'soft-watercolor', label:'Soft Watercolor',  desc:'pastel washes, dreamy soft edges, painterly' },
+  { id:'sticker-style',   label:'Sticker Style',    desc:'bold outlines, flat fills, die-cut look' },
+];
+
+function buildAvatarPrompt(options) {
+  const { gender = 'Girl', hairColor = 'Brown', hairStyle = 'Long Wavy', eyeColor = 'Brown',
+          outfit, background, artStyle = 'polished-anime', softness = 50, sparkle = 50 } = options;
+
+  const outfitData = AVATAR_OUTFITS.find(o => o.id === outfit) || AVATAR_OUTFITS[0];
+  const bgData     = AVATAR_BACKGROUNDS.find(b => b.id === background) || AVATAR_BACKGROUNDS[0];
+
+  const genderDesc = gender === 'Girl' ? 'cute female chibi character' :
+                     gender === 'Boy'  ? 'cute male chibi character' :
+                                         'cute chibi character';
+
+  let styleDesc = 'ultra-polished anime illustration, clean confident linework, smooth cel-shaded fills, luminous glossy eyes';
+  if (artStyle === 'soft-watercolor') styleDesc = 'soft watercolor illustration, gentle pastel washes, dreamy soft edges, delicate ink linework, painterly finish';
+  if (artStyle === 'sticker-style')   styleDesc = 'premium sticker illustration, bold confident outlines, flat vibrant fills, crisp die-cut white border';
+
+  const softDesc    = softness >= 60 ? ', soft painterly texture, gentle color gradients' : '';
+  const sparkleDesc = sparkle  >= 60 ? ', magical sparkles, glowing golden light particles, shimmering bokeh effects' :
+                      sparkle  >= 30 ? ', subtle sparkle accents, soft glow' : '';
+
+  return [
+    `chibi anime avatar, ${genderDesc},`,
+    `${hairColor.toLowerCase()} ${hairStyle.toLowerCase()} hair, ${eyeColor.toLowerCase()} eyes,`,
+    `wearing ${outfitData.prompt},`,
+    `background: ${bgData.desc},`,
+    `${styleDesc}${softDesc}${sparkleDesc},`,
+    'cute chibi proportions with large expressive eyes, small cute body,',
+    'high quality, professional digital art, vivid colors, detailed illustration,',
+    '2D anime art style, 1:1 square format, no text, no watermarks',
+  ].join(' ');
+}
+
+function AvatarWizard() {
+  const { addToast } = useToast();
+  const { user } = useAuth();
+  const [step,         setStep]         = useState(1);
+  const [generating,   setGenerating]   = useState(false);
+  const [resultImg,    setResultImg]    = useState(null);
+  const [savedAvatar,  setSavedAvatar]  = useState(() => localStorage.getItem('chibi_avatar') || null);
+
+  // Wizard state
+  const [gender,       setGender]       = useState('Girl');
+  const [hairColor,    setHairColor]    = useState('Brown');
+  const [hairStyle,    setHairStyle]    = useState('Long Wavy');
+  const [eyeColor,     setEyeColor]     = useState('Brown');
+  const [outfit,       setOutfit]       = useState('casual-fashion');
+  const [background,   setBackground]   = useState('golden-glow');
+  const [artStyle,     setArtStyle]     = useState('polished-anime');
+  const [softness,     setSoftness]     = useState(50);
+  const [sparkle,      setSparkle]      = useState(50);
+
+  const sectionRef = useRef(null);
+  const visible    = useIntersection(sectionRef);
+
+  async function handleGenerate() {
+    if (!hasApiKey()) {
+      addToast('Add your OpenAI API key in ⚙️ Settings to generate avatars', 'warning');
+      return;
+    }
+    setGenerating(true);
+    setResultImg(null);
+    try {
+      const prompt = buildAvatarPrompt({ gender, hairColor, hairStyle, eyeColor, outfit, background, artStyle, softness, sparkle });
+      const img = await generateWithOpenAI(prompt, false);
+      setResultImg(img);
+      setStep(5);
+    } catch (e) {
+      if (e.message === 'NO_API_KEY') addToast('Add your OpenAI API key in ⚙️ Settings', 'warning');
+      else addToast(`Generation failed: ${e.message}`, 'error');
+    } finally {
+      setGenerating(false);
+    }
+  }
+
+  function handleSetAsAvatar() {
+    if (!resultImg) return;
+    localStorage.setItem('chibi_avatar', resultImg);
+    setSavedAvatar(resultImg);
+    addToast('🎉 Chibi avatar set as your profile!', 'success');
+  }
+
+  function handleDownload() {
+    if (!resultImg) return;
+    const a = document.createElement('a');
+    a.href = resultImg;
+    a.download = 'my-chibi-avatar.png';
+    a.click();
+  }
+
+  function handleRegenerate() {
+    setStep(4);
+    setResultImg(null);
+  }
+
+  const steps = ['Character', 'Outfit', 'Background', 'Fine-tune'];
+
+  // --- Step renderers ---
+  function StepIndicator() {
+    return React.createElement('div', { className:'avatar-step-indicator' },
+      steps.map((label, i) => {
+        const n = i + 1;
+        const active    = step === n;
+        const completed = step > n;
+        return React.createElement('div', { key:n, className:`avatar-step-dot ${active?'active':''} ${completed?'completed':''}` },
+          React.createElement('div', { className:'avatar-step-circle' }, completed ? '✓' : n),
+          React.createElement('div', { className:'avatar-step-label' }, label)
+        );
+      })
+    );
+  }
+
+  function OptionGrid({ items, selected, onSelect }) {
+    return React.createElement('div', { className:'avatar-option-grid' },
+      items.map(item => {
+        const value = typeof item === 'string' ? item : item.id || item.label;
+        const label = typeof item === 'string' ? item : (item.label || item.name || item);
+        const emoji = typeof item === 'object' ? item.emoji : null;
+        const desc  = typeof item === 'object' ? item.desc  : null;
+        return React.createElement('div', {
+          key:       value,
+          className: `avatar-option-card ${selected === value ? 'selected' : ''}`,
+          onClick:   () => onSelect(value),
+        },
+          emoji && React.createElement('div', { className:'avatar-option-emoji' }, emoji),
+          React.createElement('div', { className:'avatar-option-label' }, label),
+          desc && React.createElement('div', { className:'avatar-option-desc' }, desc)
+        );
+      })
+    );
+  }
+
+  function renderStep() {
+    if (generating) return React.createElement('div', { className:'avatar-loading' },
+      React.createElement('div', { className:'avatar-spinner' }, '✨'),
+      React.createElement('p', { className:'avatar-loading-text' }, 'Crafting your chibi avatar...'),
+      React.createElement('p', { style:{fontSize:'13px',color:'var(--text-muted)',marginTop:'8px'} }, 'This takes about 10–20 seconds')
+    );
+
+    if (step === 5 && resultImg) return React.createElement('div', { style:{textAlign:'center'} },
+      React.createElement('div', { className:'avatar-result-frame' },
+        React.createElement('img', { src:resultImg, alt:'Your chibi avatar', style:{width:'100%',height:'100%',objectFit:'cover',borderRadius:'50%'} })
+      ),
+      React.createElement('h3', { style:{margin:'20px 0 8px',fontSize:'22px',fontWeight:700} }, '🎉 Your Chibi Avatar!'),
+      React.createElement('p', { style:{color:'var(--text-secondary)',marginBottom:'20px'} }, 'Looking adorable! What would you like to do?'),
+      React.createElement('div', { className:'avatar-result-actions' },
+        React.createElement('button', { className:'btn btn-gold', onClick:handleSetAsAvatar }, '⭐ Set as Profile Avatar'),
+        React.createElement('button', { className:'btn btn-primary', onClick:handleDownload }, '⬇️ Download PNG'),
+        React.createElement('button', { className:'btn btn-secondary', onClick:handleRegenerate }, '🔄 Regenerate'),
+        React.createElement('button', { className:'btn btn-secondary', onClick:()=>setStep(1) }, '🎨 Edit Settings')
+      )
+    );
+
+    if (step === 1) return React.createElement('div', { className:'avatar-wizard-step' },
+      React.createElement('h3', { className:'avatar-step-title' }, '👤 Step 1 — Character Style'),
+      React.createElement('div', { className:'avatar-field-group' },
+        React.createElement('label', { className:'avatar-field-label' }, 'Gender'),
+        React.createElement(OptionGrid, { items:AVATAR_GENDERS, selected:gender, onSelect:setGender })
+      ),
+      React.createElement('div', { className:'avatar-field-group' },
+        React.createElement('label', { className:'avatar-field-label' }, 'Hair Color'),
+        React.createElement(OptionGrid, { items:AVATAR_HAIR_COLORS, selected:hairColor, onSelect:setHairColor })
+      ),
+      React.createElement('div', { className:'avatar-field-group' },
+        React.createElement('label', { className:'avatar-field-label' }, 'Hair Style'),
+        React.createElement(OptionGrid, { items:AVATAR_HAIR_STYLES, selected:hairStyle, onSelect:setHairStyle })
+      ),
+      React.createElement('div', { className:'avatar-field-group' },
+        React.createElement('label', { className:'avatar-field-label' }, 'Eye Color'),
+        React.createElement(OptionGrid, { items:AVATAR_EYE_COLORS, selected:eyeColor, onSelect:setEyeColor })
+      )
+    );
+
+    if (step === 2) return React.createElement('div', { className:'avatar-wizard-step' },
+      React.createElement('h3', { className:'avatar-step-title' }, '👗 Step 2 — Outfit / Role'),
+      React.createElement(OptionGrid, { items:AVATAR_OUTFITS, selected:outfit, onSelect:setOutfit })
+    );
+
+    if (step === 3) return React.createElement('div', { className:'avatar-wizard-step' },
+      React.createElement('h3', { className:'avatar-step-title' }, '🌅 Step 3 — Background & Mood'),
+      React.createElement(OptionGrid, { items:AVATAR_BACKGROUNDS, selected:background, onSelect:setBackground })
+    );
+
+    if (step === 4) return React.createElement('div', { className:'avatar-wizard-step' },
+      React.createElement('h3', { className:'avatar-step-title' }, '🎨 Step 4 — Style Fine-tuning'),
+      React.createElement('div', { className:'avatar-field-group' },
+        React.createElement('label', { className:'avatar-field-label' }, 'Art Style'),
+        React.createElement(OptionGrid, { items:AVATAR_ART_STYLES, selected:artStyle, onSelect:setArtStyle })
+      ),
+      React.createElement('div', { className:'avatar-field-group' },
+        React.createElement('label', { className:'avatar-field-label' }, `Softness — ${softness}`),
+        React.createElement('input', { type:'range', min:0, max:100, value:softness, onChange:e=>setSoftness(Number(e.target.value)), className:'avatar-slider' }),
+        React.createElement('div', { className:'avatar-slider-labels' }, React.createElement('span',null,'Crisp'), React.createElement('span',null,'Painterly'))
+      ),
+      React.createElement('div', { className:'avatar-field-group' },
+        React.createElement('label', { className:'avatar-field-label' }, `Sparkle & Glow — ${sparkle}`),
+        React.createElement('input', { type:'range', min:0, max:100, value:sparkle, onChange:e=>setSparkle(Number(e.target.value)), className:'avatar-slider' }),
+        React.createElement('div', { className:'avatar-slider-labels' }, React.createElement('span',null,'Minimal'), React.createElement('span',null,'Magical ✨'))
+      )
+    );
+  }
+
+  return React.createElement('section', { className:'avatar-section', id:'avatar', ref:sectionRef },
+    React.createElement('div', { className:'container' },
+      React.createElement('div', { className:`section-header fade-in-up ${visible?'visible':''}` },
+        React.createElement('div', { className:'section-badge' }, '🤖 MY AVATAR'),
+        React.createElement('h2', { className:'section-title' }, 'Create Your Chibi Avatar'),
+        React.createElement('p', { className:'section-subtitle' }, 'Design a personalized chibi avatar in 4 easy steps — choose your look, outfit, and style, then generate with AI.')
+      ),
+
+      React.createElement('div', { className:`avatar-wizard fade-in-up ${visible?'visible':''}`, style:{animationDelay:'0.1s'} },
+
+        savedAvatar && step !== 5 && React.createElement('div', { className:'avatar-current-preview' },
+          React.createElement('img', { src:savedAvatar, alt:'Current avatar', className:'avatar-current-img' }),
+          React.createElement('span', { style:{fontSize:'13px',color:'var(--text-secondary)'} }, 'Your current avatar')
+        ),
+
+        !generating && step <= 4 && React.createElement(StepIndicator),
+
+        React.createElement('div', { className:'avatar-wizard-body' },
+          renderStep()
+        ),
+
+        !generating && React.createElement('div', { className:'avatar-wizard-nav' },
+          step > 1 && step <= 4 && React.createElement('button', {
+            className: 'btn btn-secondary',
+            onClick: () => setStep(s => s - 1)
+          }, '← Back'),
+          step < 4 && React.createElement('button', {
+            className: 'btn btn-primary',
+            onClick: () => setStep(s => s + 1)
+          }, 'Next →'),
+          step === 4 && React.createElement('button', {
+            className: 'btn btn-gold btn-lg',
+            onClick: handleGenerate,
+            disabled: generating,
+          }, '✨ Generate My Avatar')
+        )
+      )
+    )
+  );
+}
+
+// =====================================================
 // FOOTER
 // =====================================================
 
@@ -2351,7 +2655,7 @@ function App() {
     s.textContent = '@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}} @keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}';
     document.head.appendChild(s);
     // Section tracker
-    const ids = ['hero','studio','gallery','ux','architecture','pricing'];
+    const ids = ['hero','studio','gallery','avatar','ux','architecture','pricing'];
     const obs = ids.map(id => {
       const el = document.getElementById(id);
       if (!el) return null;
@@ -2369,6 +2673,7 @@ function App() {
         React.createElement(HeroSection,    { onStartCreating:()=>document.getElementById('studio')?.scrollIntoView({behavior:'smooth'}) }),
         React.createElement(CreationStudio, { onOpenAuth:(mode)=>setAuthModal(mode||'login'), onOpenSettings:()=>setSettingsOpen(true) }),
         React.createElement(GallerySection),
+        React.createElement(AvatarWizard),
         React.createElement(UXSection),
         React.createElement(ArchSection),
         React.createElement(PricingSection),

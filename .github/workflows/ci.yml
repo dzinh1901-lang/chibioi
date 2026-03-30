@@ -1,0 +1,71 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    name: Validate Project
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check required files exist
+        run: |
+          test -f index.html      && echo "✅ index.html"
+          test -f landing.html    && echo "✅ landing.html"
+          test -f js/app.js       && echo "✅ js/app.js"
+          test -f css/styles.css  && echo "✅ css/styles.css"
+          test -f health.html     && echo "✅ health.html"
+          test -f .gitignore      && echo "✅ .gitignore"
+          test -f .env.example    && echo "✅ .env.example"
+          test -f DEPLOYMENT.md   && echo "✅ DEPLOYMENT.md"
+
+      - name: Validate HTML structure
+        run: |
+          node -e "
+            const fs = require('fs');
+            ['index.html', 'landing.html', 'health.html', '404.html'].forEach(f => {
+              const content = fs.readFileSync(f, 'utf8');
+              if (!content.includes('<!DOCTYPE html>')) throw new Error(f + ' missing DOCTYPE');
+              console.log('✅ ' + f + ' valid');
+            });
+          "
+
+      - name: Check for hardcoded secrets
+        run: |
+          if grep -rE "sk-proj-[a-zA-Z0-9]{10}" --include="*.js" --include="*.html" . 2>/dev/null | grep -v ".env.example"; then
+            echo "❌ Hardcoded API keys found!"
+            exit 1
+          else
+            echo "✅ No hardcoded secrets found"
+          fi
+
+  deploy-pages:
+    name: Deploy to GitHub Pages
+    needs: validate
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/configure-pages@v4
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.'
+      - uses: actions/deploy-pages@v4
+        id: deployment

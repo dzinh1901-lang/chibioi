@@ -241,6 +241,47 @@ PATCH  tables/generations/{id} Body: { outputImageUrl, status, downloads }
 
 ---
 
+## 🤖 AI Avatar Generator
+
+The **My Avatar** tab lets you create a fully personalized chibi avatar in 4 guided steps.
+
+### How to Use
+
+1. **Click "My Avatar"** in the navigation bar (or scroll to the My Avatar section).
+2. Complete the 4-step wizard:
+   - **Step 1 — Character**: Choose gender, hair color & style, eye color
+   - **Step 2 — Outfit / Role**: Pick a themed profession outfit
+   - **Step 3 — Background & Mood**: Select the scene/environment
+   - **Step 4 — Fine-tune**: Set art style, softness, and sparkle level
+3. Click **✨ Generate My Avatar** — your chibi is created with DALL-E.
+4. **Set as Profile Avatar** to save it to your profile.
+
+### Profession / Style Options
+
+| Outfit | Theme |
+|--------|-------|
+| 🎺 Marching Band | Navy & gold uniform, white feather cap, trumpet |
+| 🍽️ Fine Dining | Dark red suit, white gloves, candles & wine |
+| 👩‍⚕️ Doctor / Nurse | White coat, stethoscope, medical background |
+| 👨‍🍳 Pastry Chef | White chef hat, piping bag, bakery background |
+| ✈️ Pilot | White uniform, headset, cockpit background |
+| 🌅 Romantic Dinner | Casual elegant, sunset background, wine |
+| 🌸 Kimono / Traditional | Pink floral kimono, cherry blossom garden |
+| 👗 Casual Fashion | Jeans, cozy sweater, warm bokeh background |
+| 🔬 Scientist | Lab coat, microscope, laboratory |
+| 👷 Engineer / Builder | Work clothes, laptop, blueprints |
+
+### Prompt Engineering
+
+The wizard uses `buildAvatarPrompt()` to construct optimized DALL-E prompts. Every generated prompt includes:
+- "chibi anime" + "cute chibi proportions with large expressive eyes"
+- Outfit vocabulary tuned to the selected role
+- Background and mood descriptors
+- Quality boosters: high quality, professional digital art, vivid colors, detailed illustration
+- Style modifiers based on softness/sparkle sliders
+
+---
+
 ## 🎨 Design Tokens
 
 | Token | Value | Usage |
