@@ -169,3 +169,24 @@ All infrastructure, performance, SEO, and documentation issues have been resolve
 ## Recommended Next-Phase Roadmap
 
 See `docs/next-phase-roadmap.md` for the full 30/60/90 day plan.
+
+---
+
+## Avatar Wizard Feature Audit
+
+### Overview
+A full 6-step Avatar Wizard was built into the application as a key new feature.
+
+### Steps implemented
+1. Gender & Skin Tone selection
+2. Hair color, length, and eye color selection
+3. Profession/theme selection (12 presets matching chibi style reference)
+4. Art style & background selection
+5. Softness & Sparkle customization sliders
+6. Preview, generate, download, share, and gallery save
+
+### Prompt Engineering
+DALL-E prompts are constructed from a master template ensuring chibi proportions (big head, large eyes, small body) are always specified. Profession prompts are pre-engineered to match the target visual style shown in the reference photos.
+
+### DALL-E Integration
+Uses the existing `generateWithOpenAI()` function. Compatible with both DALL-E 3 (default) and DALL-E 2.
