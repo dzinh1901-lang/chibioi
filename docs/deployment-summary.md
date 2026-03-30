@@ -40,6 +40,31 @@ Full repository audit of `dzinh1901-lang/chibioi` covering:
 
 ---
 
+## Phase 2 Deliverables
+
+| Item | Status |
+|---|---|
+| `supabase/functions/generate-chibi/index.ts`: Supabase Edge Function proxy | ✅ Added |
+| `supabase/functions/generate-chibi/README.md`: Deployment instructions | ✅ Added |
+| `supabase/config.toml`: Supabase local dev config | ✅ Added |
+| `api/generate.js`: Vercel serverless OpenAI proxy | ✅ Added |
+| `api/health.js`: Vercel health check endpoint | ✅ Added |
+| `api/billing/checkout.js`: Stripe checkout session | ✅ Added |
+| `api/billing/webhook.js`: Stripe webhook handler | ✅ Added |
+| `vercel.json`: Vercel config with security headers | ✅ Added |
+| `manifest.json`: PWA web app manifest | ✅ Added |
+| `sw.js`: Service worker for offline caching | ✅ Added |
+| `index.html`: PWA meta tags + SW registration | ✅ Updated |
+| `robots.txt`: Search engine directives | ✅ Added |
+| `sitemap.xml`: XML sitemap | ✅ Added |
+| `tests/unit/promptBuilder.test.js`: Unit tests | ✅ Added |
+| `tests/e2e/smoke.spec.js`: Playwright E2E tests | ✅ Added |
+| `playwright.config.js`: Playwright configuration | ✅ Added |
+| `package.json`: Dev tooling package manifest | ✅ Added |
+| `.github/workflows/ci.yml`: Added test + E2E jobs | ✅ Updated |
+
+---
+
 ## Deployment Options Available
 
 1. **GitHub Pages** — Free, automatic via `.github/workflows/ci.yml` on push to `main`.

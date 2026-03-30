@@ -1,0 +1,24 @@
+{
+  "name": "chibioi",
+  "version": "4.0.0",
+  "description": "AI Chibi Character Generator — Production-grade React SPA",
+  "private": true,
+  "scripts": {
+    "test:unit": "node tests/unit/promptBuilder.test.js",
+    "test:e2e": "npx playwright test",
+    "test:e2e:ui": "npx playwright test --ui",
+    "test": "npm run test:unit",
+    "serve": "npx serve . -p 8080",
+    "validate": "node -e \"['index.html','landing.html','health.html','404.html','js/app.js','css/styles.css'].forEach(f=>{require('fs').readFileSync(f);console.log('✅',f)})\"",
+    "lint:secrets": "! grep -r 'sk-proj-[a-zA-Z0-9]' --include='*.js' --include='*.html' . 2>/dev/null | grep -v '.env'"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.42.0",
+    "serve": "^14.2.1"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "keywords": ["chibi", "anime", "avatar", "openai", "dall-e", "react"],
+  "license": "MIT"
+}

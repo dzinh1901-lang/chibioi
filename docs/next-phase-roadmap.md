@@ -4,8 +4,13 @@
 
 **Goal**: Launch safely on GitHub Pages with critical security risks mitigated.
 
-- [ ] Deploy to GitHub Pages via CI/CD (ready now)
-- [ ] Build server-side backend proxy for OpenAI API key (Node.js/Vercel Functions or Supabase Edge Functions)
+- ✅ Deploy to GitHub Pages via CI/CD
+- ✅ Build server-side backend proxy for OpenAI API key (Supabase Edge Function + Vercel Functions)
+- ✅ PWA manifest + service worker added
+- ✅ Unit tests + Playwright E2E tests added
+- ✅ robots.txt + sitemap.xml added
+- ✅ Supabase Edge Function proxy scaffold created (`supabase/functions/generate-chibi/`)
+- ✅ Vercel API routes scaffold created (`api/generate.js`, `api/health.js`, `api/billing/`)
 - [ ] Replace `btoa(password)` with `bcrypt` (cost 12+) on the server
 - [ ] Implement short-lived JWT sessions (access token + HTTP-only refresh cookie)
 - [ ] Set spending limits on OpenAI account
@@ -25,7 +30,6 @@
 - [ ] Implement Discord OAuth via Supabase Auth
 - [ ] Enforce generation quotas server-side (not client-side localStorage)
 - [ ] Add basic rate limiting on the backend proxy
-- [ ] Add Playwright E2E tests for critical user flows
 
 ---
 
@@ -35,11 +39,10 @@
 
 - [ ] Prompt Marketplace — community-shared prompts
 - [ ] API access for Studio plan users
-- [ ] Mobile-responsive improvements and PWA manifest
+- [ ] Mobile-responsive improvements
 - [ ] Localization / i18n foundation
 - [ ] Referral / sharing features (share avatar, share creation)
 - [ ] A/B test pricing page
 - [ ] Set up PostHog or Mixpanel for product analytics
 - [ ] Performance audit — consider self-hosting React/Babel to reduce CDN dependency
 - [ ] Accessibility audit — WCAG 2.1 AA compliance
-- [ ] Add automated tests: unit (prompt builders), integration (API proxy), E2E (Playwright)

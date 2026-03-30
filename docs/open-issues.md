@@ -22,7 +22,7 @@ Last updated: 2026-03-30
 - **Problem**: The OpenAI API key is stored in `localStorage` and sent directly from the user's browser to `api.openai.com`. It is visible in browser DevTools, network inspector, and any browser extension.
 - **Impact**: API key theft, unauthorized usage charges, account compromise.
 - **Remediation**: Build a server-side proxy endpoint (e.g., `/api/generate`) that holds the key server-side and forwards sanitized requests to OpenAI. The browser should never see the key.
-- **Status**: ⚠️ Warning comment added. Fix pending backend implementation.
+- **Status**: ⚠️ Supabase Edge Function and Vercel API route scaffolds created in `supabase/functions/generate-chibi/` and `api/generate.js`. Deploy and set `OPENAI_API_KEY` secret to activate.
 
 ---
 

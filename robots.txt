@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+Allow: /landing.html
+
+Disallow: /api/
+Disallow: /.env
+Disallow: /.env.example
+
+Sitemap: https://dzinh1901-lang.github.io/chibioi/sitemap.xml
