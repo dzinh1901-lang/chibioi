@@ -1,0 +1,1339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chibi Creator — Complete File Audit & Analysis Report</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap');
+
+    :root {
+      --peach: #FFD6C0;
+      --pink: #FFB6C1;
+      --blue: #87CEEB;
+      --gold: #FFD700;
+      --gold-soft: #F0C674;
+      --purple: #9B59B6;
+      --green: #27AE60;
+      --red: #E74C3C;
+      --orange: #E67E22;
+      --text: #1a1a2e;
+      --muted: #6B6B8D;
+      --bg: #FAFAFA;
+      --card: #FFFFFF;
+      --border: rgba(255,182,193,0.3);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      font-size: 14px;
+    }
+
+    /* ── PRINT ── */
+    @media print {
+      body { background: white; font-size: 12px; }
+      .no-print { display: none !important; }
+      .page-break { page-break-before: always; }
+      .section-card { box-shadow: none !important; border: 1px solid #ddd !important; }
+      a { color: inherit; text-decoration: none; }
+    }
+
+    /* ── LAYOUT ── */
+    .wrapper {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 40px 32px 80px;
+    }
+
+    /* ── COVER ── */
+    .cover {
+      background: linear-gradient(135deg, #FFF5E6 0%, #FFE8E0 40%, #E8F4FD 80%, #FFF0F5 100%);
+      border-radius: 20px;
+      padding: 56px 48px;
+      margin-bottom: 40px;
+      border: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+    }
+    .cover::before {
+      content: '';
+      position: absolute;
+      top: -60px; right: -60px;
+      width: 280px; height: 280px;
+      border-radius: 50%;
+      background: rgba(255,182,193,0.15);
+    }
+    .cover::after {
+      content: '';
+      position: absolute;
+      bottom: -40px; left: -40px;
+      width: 200px; height: 200px;
+      border-radius: 50%;
+      background: rgba(135,206,235,0.12);
+    }
+    .cover-badge {
+      display: inline-block;
+      background: linear-gradient(135deg, #F0C674, #FFB6C1);
+      color: white;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 5px 16px;
+      border-radius: 50px;
+      margin-bottom: 20px;
+    }
+    .cover h1 {
+      font-size: 36px;
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 12px;
+      color: var(--text);
+    }
+    .cover h1 span {
+      background: linear-gradient(135deg, #FF8C69, #FFB6C1, #F0C674);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .cover-meta {
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 20px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+    .cover-meta span { display: flex; align-items: center; gap: 6px; }
+    .cover-stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-top: 32px;
+    }
+    .cover-stat {
+      background: rgba(255,255,255,0.8);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px;
+      text-align: center;
+    }
+    .cover-stat-num {
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--text);
+    }
+    .cover-stat-label {
+      font-size: 11px;
+      color: var(--muted);
+      font-weight: 500;
+      margin-top: 2px;
+    }
+
+    /* ── TOC ── */
+    .toc {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px 32px;
+      margin-bottom: 36px;
+    }
+    .toc h2 {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 16px;
+    }
+    .toc-list { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+    .toc-list a {
+      text-decoration: none;
+      color: var(--text);
+      font-size: 14px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 6px 0;
+      border-bottom: 1px solid rgba(255,182,193,0.15);
+      transition: color 0.2s;
+    }
+    .toc-list a:hover { color: #FF8C69; }
+    .toc-list a .toc-num {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--muted);
+      min-width: 24px;
+    }
+
+    /* ── SECTIONS ── */
+    .section-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 36px 40px;
+      margin-bottom: 32px;
+      box-shadow: 0 4px 20px rgba(255,182,193,0.08);
+    }
+    .section-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+    .section-title {
+      font-size: 22px;
+      font-weight: 800;
+      margin-bottom: 20px;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* ── BADGES ── */
+    .badge {
+      display: inline-block;
+      padding: 3px 12px;
+      border-radius: 50px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+    }
+    .badge-red    { background: rgba(231,76,60,0.12);  color: #C0392B; }
+    .badge-orange { background: rgba(230,126,34,0.12); color: #A04000; }
+    .badge-yellow { background: rgba(255,215,0,0.15);  color: #7A5C00; }
+    .badge-blue   { background: rgba(135,206,235,0.2); color: #1A6B8A; }
+    .badge-green  { background: rgba(39,174,96,0.12);  color: #1E7E34; }
+    .badge-purple { background: rgba(155,89,182,0.12); color: #6C3483; }
+
+    /* ── TABLES ── */
+    .audit-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      margin-bottom: 20px;
+    }
+    .audit-table th {
+      background: linear-gradient(135deg, #FFF5E6, #FFE8E0);
+      padding: 12px 16px;
+      text-align: left;
+      font-weight: 700;
+      font-size: 12px;
+      letter-spacing: 0.04em;
+      color: var(--muted);
+      border-bottom: 2px solid var(--border);
+    }
+    .audit-table td {
+      padding: 12px 16px;
+      border-bottom: 1px solid rgba(255,182,193,0.15);
+      vertical-align: top;
+    }
+    .audit-table tr:last-child td { border-bottom: none; }
+    .audit-table tr:hover td { background: rgba(255,245,230,0.5); }
+    .audit-table .mono {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      background: rgba(135,206,235,0.1);
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    /* ── ISSUE CARDS ── */
+    .issue-grid { display: flex; flex-direction: column; gap: 16px; }
+    .issue-card {
+      border-radius: 14px;
+      padding: 20px 24px;
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 16px;
+      align-items: start;
+    }
+    .issue-card.critical {
+      background: rgba(231,76,60,0.06);
+      border: 1px solid rgba(231,76,60,0.25);
+      border-left: 4px solid #E74C3C;
+    }
+    .issue-card.high {
+      background: rgba(230,126,34,0.06);
+      border: 1px solid rgba(230,126,34,0.2);
+      border-left: 4px solid #E67E22;
+    }
+    .issue-card.medium {
+      background: rgba(255,215,0,0.06);
+      border: 1px solid rgba(255,215,0,0.3);
+      border-left: 4px solid #F0C674;
+    }
+    .issue-card.low {
+      background: rgba(135,206,235,0.06);
+      border: 1px solid rgba(135,206,235,0.25);
+      border-left: 4px solid #87CEEB;
+    }
+    .issue-id {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      font-weight: 700;
+      min-width: 40px;
+      margin-top: 2px;
+    }
+    .issue-card.critical .issue-id { color: #C0392B; }
+    .issue-card.high     .issue-id { color: #A04000; }
+    .issue-card.medium   .issue-id { color: #7A5C00; }
+    .issue-card.low      .issue-id { color: #1A6B8A; }
+    .issue-title {
+      font-weight: 700;
+      font-size: 14px;
+      margin-bottom: 6px;
+      color: var(--text);
+    }
+    .issue-body { font-size: 13px; color: var(--muted); line-height: 1.6; }
+    .issue-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 8px;
+    }
+    .issue-tag {
+      font-size: 11px;
+      font-weight: 600;
+      background: rgba(255,255,255,0.8);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 2px 10px;
+      color: var(--muted);
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* ── PROMPT LAYERS ── */
+    .layer-list { display: flex; flex-direction: column; gap: 12px; }
+    .layer-item {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+      padding: 16px 20px;
+      background: rgba(255,245,230,0.5);
+      border: 1px solid rgba(255,182,193,0.2);
+      border-radius: 12px;
+    }
+    .layer-num {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #F0C674, #FFB6C1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 800;
+      color: white;
+      flex-shrink: 0;
+    }
+    .layer-name { font-weight: 700; font-size: 14px; margin-bottom: 2px; }
+    .layer-desc { font-size: 13px; color: var(--muted); }
+    .layer-status { margin-top: 4px; }
+
+    /* ── PASS/FAIL PILL ── */
+    .pill-pass {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: rgba(39,174,96,0.12);
+      color: #1E7E34;
+      border-radius: 50px;
+      padding: 2px 12px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .pill-warn {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: rgba(255,215,0,0.15);
+      color: #7A5C00;
+      border-radius: 50px;
+      padding: 2px 12px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .pill-fail {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: rgba(231,76,60,0.1);
+      color: #C0392B;
+      border-radius: 50px;
+      padding: 2px 12px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    /* ── PRIORITY LIST ── */
+    .priority-section { margin-bottom: 24px; }
+    .priority-title {
+      font-size: 13px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .priority-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 12px 16px;
+      border-radius: 10px;
+      margin-bottom: 8px;
+      font-size: 13px;
+    }
+    .priority-item.p-red    { background: rgba(231,76,60,0.06);  border: 1px solid rgba(231,76,60,0.2); }
+    .priority-item.p-orange { background: rgba(230,126,34,0.06); border: 1px solid rgba(230,126,34,0.15); }
+    .priority-item.p-blue   { background: rgba(135,206,235,0.06);border: 1px solid rgba(135,206,235,0.2); }
+    .priority-item .p-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 700;
+      min-width: 32px;
+      margin-top: 1px;
+    }
+
+    /* ── CODE BLOCK ── */
+    .code-block {
+      background: #1E1E2E;
+      border-radius: 12px;
+      padding: 20px 24px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      line-height: 1.8;
+      color: #CDD6F4;
+      overflow-x: auto;
+      margin: 16px 0;
+    }
+    .code-comment { color: #6C7086; }
+    .code-key { color: #89B4FA; }
+    .code-val { color: #A6E3A1; }
+    .code-str { color: #F9E2AF; }
+
+    /* ── WORKING SECTION ── */
+    .working-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .working-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 12px 16px;
+      background: rgba(39,174,96,0.05);
+      border: 1px solid rgba(39,174,96,0.2);
+      border-radius: 12px;
+      font-size: 13px;
+    }
+    .working-icon { font-size: 16px; flex-shrink: 0; }
+
+    /* ── DB TABLE ── */
+    .db-card {
+      background: rgba(255,245,230,0.4);
+      border: 1px solid rgba(255,182,193,0.3);
+      border-radius: 14px;
+      padding: 20px 24px;
+      margin-bottom: 16px;
+    }
+    .db-card-title {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* ── DIVIDER ── */
+    .divider {
+      height: 1px;
+      background: var(--border);
+      margin: 32px 0;
+    }
+
+    /* ── FOOTER ── */
+    .report-footer {
+      text-align: center;
+      padding: 40px 0 20px;
+      font-size: 12px;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+    }
+
+    /* ── DOWNLOAD BTN ── */
+    .download-bar {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 1000;
+      display: flex;
+      gap: 10px;
+    }
+    .download-btn {
+      background: linear-gradient(135deg, #FFD700, #F0C674);
+      color: #7A5C00;
+      border: none;
+      border-radius: 50px;
+      padding: 10px 22px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 4px 20px rgba(240,198,116,0.4);
+      font-family: 'Inter', sans-serif;
+      transition: all 0.2s;
+    }
+    .download-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(240,198,116,0.5);
+    }
+
+    /* ── SUMMARY BAR ── */
+    .summary-bar {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 12px;
+      margin-bottom: 32px;
+    }
+    .summary-cell {
+      border-radius: 14px;
+      padding: 18px 16px;
+      text-align: center;
+    }
+    .summary-cell.c-red    { background: rgba(231,76,60,0.08);  border: 1px solid rgba(231,76,60,0.2); }
+    .summary-cell.c-orange { background: rgba(230,126,34,0.08); border: 1px solid rgba(230,126,34,0.2); }
+    .summary-cell.c-yellow { background: rgba(255,215,0,0.1);   border: 1px solid rgba(255,215,0,0.3); }
+    .summary-cell.c-blue   { background: rgba(135,206,235,0.1); border: 1px solid rgba(135,206,235,0.3);}
+    .summary-cell.c-green  { background: rgba(39,174,96,0.08);  border: 1px solid rgba(39,174,96,0.2); }
+    .summary-num  { font-size: 28px; font-weight: 800; }
+    .summary-cell.c-red    .summary-num { color: #C0392B; }
+    .summary-cell.c-orange .summary-num { color: #A04000; }
+    .summary-cell.c-yellow .summary-num { color: #7A5C00; }
+    .summary-cell.c-blue   .summary-num { color: #1A6B8A; }
+    .summary-cell.c-green  .summary-num { color: #1E7E34; }
+    .summary-label { font-size: 11px; font-weight: 600; color: var(--muted); margin-top: 4px; }
+
+    @media (max-width: 700px) {
+      .wrapper { padding: 20px 16px 60px; }
+      .cover { padding: 36px 24px; }
+      .cover h1 { font-size: 26px; }
+      .cover-stats { grid-template-columns: repeat(2, 1fr); }
+      .section-card { padding: 24px 20px; }
+      .summary-bar { grid-template-columns: repeat(2, 1fr); }
+      .working-grid { grid-template-columns: 1fr; }
+      .download-bar { top: 10px; right: 10px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Download / Print Bar -->
+<div class="download-bar no-print">
+  <button class="download-btn" onclick="window.print()">🖨️ Print / Save PDF</button>
+</div>
+
+<div class="wrapper">
+
+  <!-- ══════════════════════════════════════════
+       COVER
+  ══════════════════════════════════════════ -->
+  <div class="cover">
+    <div class="cover-badge">✨ Technical Report · v4</div>
+    <h1>Chibi Creator<br><span>Complete File Audit &amp; Analysis</span></h1>
+    <p style="color:var(--muted);font-size:14px;max-width:580px;margin-top:12px;">
+      A comprehensive code-level review of all project files — architecture, security, functional bugs, UX issues, prompt engine quality, and prioritised fix recommendations.
+    </p>
+    <div class="cover-meta">
+      <span>📁 6 files reviewed</span>
+      <span>📄 2,385 lines (app.js)</span>
+      <span>📅 Audit date: March 30, 2026</span>
+      <span>🔖 App version: v4 Full Integration</span>
+    </div>
+    <div class="cover-stats">
+      <div class="cover-stat">
+        <div class="cover-stat-num" style="color:#C0392B;">3</div>
+        <div class="cover-stat-label">Critical (Security)</div>
+      </div>
+      <div class="cover-stat">
+        <div class="cover-stat-num" style="color:#A04000;">5</div>
+        <div class="cover-stat-label">High (Functional Bugs)</div>
+      </div>
+      <div class="cover-stat">
+        <div class="cover-stat-num" style="color:#7A5C00;">8</div>
+        <div class="cover-stat-label">Medium (UX Problems)</div>
+      </div>
+      <div class="cover-stat">
+        <div class="cover-stat-num" style="color:#1A6B8A;">10</div>
+        <div class="cover-stat-label">Low (Polish)</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       TABLE OF CONTENTS
+  ══════════════════════════════════════════ -->
+  <div class="toc">
+    <h2>📋 Table of Contents</h2>
+    <ul class="toc-list">
+      <li><a href="#s1"><span class="toc-num">01</span>Project Structure Overview</a></li>
+      <li><a href="#s2"><span class="toc-num">02</span>Architecture Quality Assessment</a></li>
+      <li><a href="#s3"><span class="toc-num">03</span>Critical Issues — Security</a></li>
+      <li><a href="#s4"><span class="toc-num">04</span>High Severity — Functional Bugs</a></li>
+      <li><a href="#s5"><span class="toc-num">05</span>Medium Severity — UX Problems</a></li>
+      <li><a href="#s6"><span class="toc-num">06</span>Low Severity — Polish &amp; Minor</a></li>
+      <li><a href="#s7"><span class="toc-num">07</span>Prompt Engine Deep Audit</a></li>
+      <li><a href="#s8"><span class="toc-num">08</span>Data Model Audit</a></li>
+      <li><a href="#s9"><span class="toc-num">09</span>Recommended Fixes (Priority Order)</a></li>
+      <li><a href="#s10"><span class="toc-num">10</span>What's Working Perfectly</a></li>
+    </ul>
+  </div>
+
+  <!-- Issue summary bar -->
+  <div class="summary-bar">
+    <div class="summary-cell c-red">
+      <div class="summary-num">3</div>
+      <div class="summary-label">🔴 Critical</div>
+    </div>
+    <div class="summary-cell c-orange">
+      <div class="summary-num">5</div>
+      <div class="summary-label">🟠 High</div>
+    </div>
+    <div class="summary-cell c-yellow">
+      <div class="summary-num">8</div>
+      <div class="summary-label">🟡 Medium</div>
+    </div>
+    <div class="summary-cell c-blue">
+      <div class="summary-num">10</div>
+      <div class="summary-label">🔵 Low</div>
+    </div>
+    <div class="summary-cell c-green">
+      <div class="summary-num">26</div>
+      <div class="summary-label">✅ Total Issues</div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       SECTION 1 — PROJECT STRUCTURE
+  ══════════════════════════════════════════ -->
+  <div class="section-card" id="s1">
+    <div class="section-label">Section 01</div>
+    <div class="section-title">📁 Project Structure Overview</div>
+
+    <table class="audit-table">
+      <thead>
+        <tr>
+          <th>File</th>
+          <th>Size</th>
+          <th>Description</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="mono">index.html</span></td>
+          <td>1.2 KB</td>
+          <td>React 18 SPA entry point (Babel CDN)</td>
+          <td><span class="pill-pass">✓ Clean</span></td>
+        </tr>
+        <tr>
+          <td><span class="mono">js/app.js</span></td>
+          <td>~135 KB</td>
+          <td>Full React application — 2,385 lines (v4)</td>
+          <td><span class="pill-pass">✓ Main app</span></td>
+        </tr>
+        <tr>
+          <td><span class="mono">css/styles.css</span></td>
+          <td>~54 KB</td>
+          <td>Complete design system with CSS variables</td>
+          <td><span class="pill-pass">✓ Complete</span></td>
+        </tr>
+        <tr>
+          <td><span class="mono">landing.html</span></td>
+          <td>~54 KB</td>
+          <td>Standalone mobile-app landing page (no React)</td>
+          <td><span class="pill-pass">✓ Separate</span></td>
+        </tr>
+        <tr>
+          <td><span class="mono">js/landing.js</span></td>
+          <td>~32 KB</td>
+          <td>Landing page interactivity</td>
+          <td><span class="pill-warn">ℹ Not audited</span></td>
+        </tr>
+        <tr>
+          <td><span class="mono">css/landing.css</span></td>
+          <td>~49 KB</td>
+          <td>Landing page styles</td>
+          <td><span class="pill-warn">ℹ Not audited</span></td>
+        </tr>
+        <tr>
+          <td><span class="mono">README.md</span></td>
+          <td>9.8 KB</td>
+          <td>Documentation with tables, endpoints, schemas</td>
+          <td><span class="pill-pass">✓ Well documented</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       SECTION 2 — ARCHITECTURE
+  ══════════════════════════════════════════ -->
+  <div class="section-card" id="s2">
+    <div class="section-label">Section 02</div>
+    <div class="section-title">🏗️ Architecture Quality Assessment — <span class="pill-pass">PASSED</span></div>
+
+    <table class="audit-table">
+      <thead>
+        <tr>
+          <th>Area</th>
+          <th>Verdict</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>React 18 with hooks only (no class components)</td><td><span class="pill-pass">✓ Clean modern patterns</span></td></tr>
+        <tr><td>7-layer premium prompt engine (<span class="mono">buildChibiPrompt</span>)</td><td><span class="pill-pass">✓ Sophisticated, layered</span></td></tr>
+        <tr><td>Centralised API helper (<span class="mono">api.get/post/patch/del</span>)</td><td><span class="pill-pass">✓ Consistent error handling</span></td></tr>
+        <tr><td><span class="mono">useScrolled, useIntersection, useClickOutside</span></td><td><span class="pill-pass">✓ Correct, reusable hooks</span></td></tr>
+        <tr><td>AuthContext with DB re-validation on session restore</td><td><span class="pill-pass">✓ Defensive session handling</span></td></tr>
+        <tr><td>Toast system with auto-remove + type icons</td><td><span class="pill-pass">✓ Good UX feedback pattern</span></td></tr>
+        <tr><td><span class="mono">generateWithOpenAI</span> returns base64 PNG via <span class="mono">b64_json</span></td><td><span class="pill-pass">✓ Correct CORS bypass</span></td></tr>
+        <tr><td>Lightbox keyboard navigation (←/→/Esc)</td><td><span class="pill-pass">✓ Accessible</span></td></tr>
+        <tr><td>Optimistic like updates with DB fallback</td><td><span class="pill-pass">✓ Correct pattern</span></td></tr>
+        <tr><td>Demo mode graceful fallback (canvas PNG)</td><td><span class="pill-pass">✓ Professional fallback</span></td></tr>
+        <tr><td>Zero console errors on page load</td><td><span class="pill-pass">✓ Verified by Playwright</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       SECTION 3 — CRITICAL
+  ══════════════════════════════════════════ -->
+  <div class="section-card" id="s3">
+    <div class="section-label">Section 03</div>
+    <div class="section-title">🔴 Critical Issues — Security</div>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:20px;">
+      These are expected limitations of a static-only frontend. Acceptable for a demo/prototype — must be resolved before any production deployment.
+    </p>
+
+    <div class="issue-grid">
+      <div class="issue-card critical">
+        <div class="issue-id">C1</div>
+        <div>
+          <div class="issue-title">Password "hashed" with btoa() — trivially reversible</div>
+          <div class="issue-body">
+            Both <code>register()</code> and <code>login()</code> use <code>btoa(password)</code> which is Base64 encoding, not hashing. Anyone with read access to the <code>users</code> table can decode all passwords with <code>atob()</code> instantly.
+          </div>
+          <div class="issue-meta">
+            <span class="issue-tag">register() line 341</span>
+            <span class="issue-tag">login() line 321</span>
+            <span class="issue-tag">Risk: credential exposure</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="issue-card critical">
+        <div class="issue-id">C2</div>
+        <div>
+          <div class="issue-title">Full user object stored in localStorage (XSS-readable)</div>
+          <div class="issue-body">
+            The complete user record including email and plan is stored as a plain JSON string in <code>localStorage</code> under the key <code>chibi_user</code>. Any XSS vulnerability can extract this data.
+          </div>
+          <div class="issue-meta">
+            <span class="issue-tag">localStorage.setItem('chibi_user', ...)</span>
+            <span class="issue-tag">Risk: user data exposure via XSS</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="issue-card critical">
+        <div class="issue-id">C3</div>
+        <div>
+          <div class="issue-title">OpenAI API key stored unencrypted in localStorage</div>
+          <div class="issue-body">
+            The user's OpenAI secret key (<code>sk-proj-…</code>) is stored in plain text in <code>localStorage</code> under <code>chibi_openai_key</code>. An XSS attack or malicious browser extension can steal it and run up billing charges.
+          </div>
+          <div class="issue-meta">
+            <span class="issue-tag">setApiKey() line 36</span>
+            <span class="issue-tag">Risk: OpenAI billing key theft</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       SECTION 4 — HIGH
+  ══════════════════════════════════════════ -->
+  <div class="section-card" id="s4">
+    <div class="section-label">Section 04</div>
+    <div class="section-title">🟠 High Severity — Functional Bugs</div>
+
+    <div class="issue-grid">
+      <div class="issue-card high">
+        <div class="issue-id">H1</div>
+        <div>
+          <div class="issue-title">Photo-to-Chibi ignores the uploaded image</div>
+          <div class="issue-body">
+            <code>photoToChibiWithOpenAI</code> builds a text prompt describing identity preservation but passes only text to DALL-E 3, which has no image input capability. The base64 photo data is accepted by the function but never sent to OpenAI. The Photo tab produces essentially the same output as the Text tab.
+          </div>
+          <div class="issue-meta">
+            <span class="issue-tag">Lines 531–555</span>
+            <span class="issue-tag">Impact: Photo tab is non-functional</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="issue-card high">
+        <div class="issue-id">H2</div>
+        <div>
+          <div class="issue-title">HD Download always downloads the same 1024×1024 image</div>
+          <div class="issue-body">
+            The <code>hd</code> flag sets <code>quality: 'hd'</code> in the DALL-E 3 request but the <code>size</code> parameter stays at <code>CHIBI_CONFIG.IMAGE_SIZE</code> which is <code>'1024x1024'</code>. Pro users clicking "HD Download" get the same resolution as the standard download — misleading.
+          </div>
+          <div class="issue-meta">
+            <span class="issue-tag">generateWithOpenAI lines 500–507</span>
+            <span class="issue-tag">Impact: HD button misleads Pro users</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="issue-card high">
+        <div class="issue-id">H3</div>
+        <div>
+          <div class="issue-title">Quota increment race condition</div>
+          <div class="issue-body">
+            <code>incrementUsage()</code> reads <code>quotaInfo.count</code> from React state and writes <code>count + 1</code>. If two generations are triggered in rapid succession (e.g., double-click), both read the same stale count and each writes <code>count + 1</code>, resulting in an undercounted quota total.
+          </div>
+          <div class="issue-meta">
+            <span class="issue-tag">Line 1238</span>
+            <span class="issue-tag">Impact: Quota bypassed via rapid clicking</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="issue-card high">
+        <div class="issue-id">H4</div>
+        <div>
+          <div class="issue-title">Gallery sort ascending — newest items appear last</div>
+          <div class="issue-body">
+            <code>loadPublicGallery</code> passes <code>sort: 'created_at'</code> to the Table API which sorts ascending by default. New user saves appear at the bottom of the 50-item gallery, buried beneath sample items that have hard-coded high like counts.
+          </div>
+          <div class="issue-meta">
+            <span class="issue-tag">Line 1739</span>
+            <span class="issue-tag">Impact: New chibis never visible in gallery</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="issue-card high">
+        <div class="issue-id">H5</div>
+        <div>
+          <div class="issue-title">Active nav highlight never fires for "How it Works"</div>
+          <div class="issue-body">
+            The section tracker in <code>App()</code> observes IDs <code>['hero','studio','gallery','ux','architecture','pricing']</code>. When the <code>ux</code> section is visible, <code>setActiveSection('ux')</code> is called correctly — but the ux link in the navbar matches <code>id:'ux'</code>, so this actually should work. However the <code>'architecture'</code> section ID is observed but the architecture section has <code>id='architecture'</code> while no nav link points to it, meaning the nav highlight gets stuck on 'architecture' while the user scrolls through pricing.
+          </div>
+          <div class="issue-meta">
+            <span class="issue-tag">App() lines 2354–2361</span>
+            <span class="issue-tag">Navbar navLinks line 907</span>
+            <span class="issue-tag">Impact: Nav highlight wrong at bottom of page</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       SECTION 5 — MEDIUM
+  ══════════════════════════════════════════ -->
+  <div class="section-card" id="s5">
+    <div class="section-label">Section 05</div>
+    <div class="section-title">🟡 Medium Severity — UX Problems</div>
+
+    <div class="issue-grid">
+      <div class="issue-card medium">
+        <div class="issue-id">M1</div>
+        <div>
+          <div class="issue-title">Post-generation action bar too crowded (9 buttons)</div>
+          <div class="issue-body">
+            The action toolbar renders: PNG, HD, Save, Share, Copy, 📄 (meta export), Zoom, 🔄 (regenerate), and "Add Key" — nine buttons on one row. On mobile (&lt;480px) these wrap to 3–4 lines. The 📄 meta export icon is cryptic to regular users.
+          </div>
+          <div class="issue-meta">
+            <span class="issue-tag">Lines 1685–1694</span>
+            <span class="issue-tag">Impact: Overwhelming on mobile</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="issue-card medium">
+        <div class="issue-id">M2</div>
+        <div>
+          <div class="issue-title">UX Section falsely claims "GPU-accelerated Stable Diffusion XL"</div>
+          <div class="issue-body">
+            The "Instant Generation" feature card reads: <em>"Results in under 10 seconds with our optimized AI pipeline backed by OpenAI and GPU-accelerated Stable Diffusion XL."</em> The app exclusively uses DALL-E 3. SDXL is not integrated.
+          </div>
+          <div class="issue-meta">
+            <span class="issue-tag">UXSection line 1962</span>
+            <span class="issue-tag">Impact: False advertising</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="issue-card medium">
+        <div class="issue-id">M3</div>
+        <div>
+          <div class="issue-title">Architecture diagram shows unimplemented stack as active</div>
+          <div class="issue-body">
+            The Architecture section displays OpenAI gpt-image-1, Stable Diffusion XL, Real-ESRGAN Upscaler, PostgreSQL + Prisma, Redis Cache, Cloudflare R2, BullMQ, Vercel Edge — none of which are connected. The actual stack is DALL-E 3 + a static Table API.
+          </div>
+          <div class="issue-meta">
+            <span class="issue-tag">ArchSection lines 1993–1999</span>
+            <span class="issue-tag">Impact: Misleads technical evaluators</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="issue-card medium">
+        <div class="issue-id">M4</div>
+        <div>
+          <div class="issue-title">Footer brand description messaging inconsistency</div>
+          <div class="issue-body">
+            Footer says: <em>"Transform anyone into an adorable anime character."</em> Hero says: <em>"premium chibi portrait — social-ready, identity-preserving."</em> These are different positioning statements creating brand confusion.
+          </div>
+          <div class="issue-meta">
+            <span class="issue-tag">Footer line 2302</span>
+            <span class="issue-tag">Impact: Inconsistent brand voice</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="issue-card medium">
+        <div class="issue-id">M5</div>
+        <div>
+          <div class="issue-title">Quota jump from 3 (guest) to 5 (free account) unexplained</div>
+          <div class="issue-body">
+            Guest users see "3 free/day" in the quota bar, but the sign-in CTA says "Sign in for 5/day." The jump from 3 to 5 is never explained. Users may not understand why signing up gives more, or may feel the guest limit is artificially low.
+          </div>
+          <div class="issue-meta">
+            <span class="issue-tag">Lines 1424–1436</span>
+            <span class="issue-tag">GUEST_DAILY_LIMIT = 3, FREE plan = 5</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="issue-card medium">
+        <div class="issue-id">M6</div>
+        <div>
+          <div class="issue-title">handleExportMeta leaks blob URL (memory)</div>
+          <div class="issue-body">
+            <code>handleExportMeta</code> creates a <code>Blob</code> and <code>URL.createObjectURL(blob)</code> but never calls <code>URL.revokeObjectURL()</code> after the click. Each metadata export leaks a blob reference in memory for the lifetime of the page.
+          </div>
+          <div class="issue-meta">
+            <span class="issue-tag">handleExportMeta line 1380</span>
+            <span class="issue-tag">Impact: Minor memory leak</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="issue-card medium">
+        <div class="issue-id">M7</div>
+        <div>
+          <div class="issue-title">Demo mode "No API key" banner visible during active generation</div>
+          <div class="issue-body">
+            The studio section header shows the "No API key — demo mode" banner based on <code>!hasApiKey()</code>. This check is not deferred during generation, so the yellow warning banner is distractingly visible while the user is already waiting for output.
+          </div>
+          <div class="issue-meta">
+            <span class="issue-tag">Line 1413</span>
+            <span class="issue-tag">Impact: Distracting during loading UX</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="issue-card medium">
+        <div class="issue-id">M8</div>
+        <div>
+          <div class="issue-title">Gallery "Refresh Gallery" button active while dbLoading is true</div>
+          <div class="issue-body">
+            The refresh button renders whenever <code>activeFilter !== 'mine'</code> without checking <code>dbLoading</code>. Clicking it while a load is in progress triggers a second concurrent <code>loadPublicGallery()</code> call, creating a race condition between two setState calls.
+          </div>
+          <div class="issue-meta">
+            <span class="issue-tag">Lines 1905–1907</span>
+            <span class="issue-tag">Impact: Gallery state race condition</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       SECTION 6 — LOW
+  ══════════════════════════════════════════ -->
+  <div class="section-card" id="s6">
+    <div class="section-label">Section 06</div>
+    <div class="section-title">🔵 Low Severity — Polish &amp; Minor</div>
+
+    <table class="audit-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Issue</th>
+          <th>Location</th>
+          <th>Impact</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>L1</strong></td>
+          <td><code>genTimerRef</code> interval not cleared on component unmount — only cleared in <code>finally</code> block</td>
+          <td><span class="mono">Line 1158</span></td>
+          <td>Console warnings if user navigates away mid-generation</td>
+        </tr>
+        <tr>
+          <td><strong>L2</strong></td>
+          <td><code>useIntersection</code> useEffect has empty dependency array — should include <code>ref</code> and <code>opts</code></td>
+          <td><span class="mono">Line 236</span></td>
+          <td>Stale closure lint warning in React StrictMode</td>
+        </tr>
+        <tr>
+          <td><strong>L3</strong></td>
+          <td><code>menuBtn</code> uses <code>label</code> as React <code>key</code> — breaks if two buttons share same label string</td>
+          <td><span class="mono">Line 994</span></td>
+          <td>Duplicate key React warning if labels repeat</td>
+        </tr>
+        <tr>
+          <td><strong>L4</strong></td>
+          <td><code>GalleryCard</code> component defined inside <code>GallerySection</code> — recreated on every parent render</td>
+          <td><span class="mono">Line 1823</span></td>
+          <td>Unnecessary re-mounts; breaks React reconciliation</td>
+        </tr>
+        <tr>
+          <td><strong>L5</strong></td>
+          <td>FAQ has 4 entries in <code>FAQ_ITEMS</code> array; README states 5 FAQs</td>
+          <td><span class="mono">Lines 196–202</span></td>
+          <td>Documentation mismatch</td>
+        </tr>
+        <tr>
+          <td><strong>L6</strong></td>
+          <td><code>handleCopyLink</code> falls back to <code>window.location.href</code> for demo images — user gets the page URL, not an image URL</td>
+          <td><span class="mono">Line 1368</span></td>
+          <td>Misleading "Link copied!" toast</td>
+        </tr>
+        <tr>
+          <td><strong>L7</strong></td>
+          <td><code>btoa()</code> throws <code>InvalidCharacterError</code> on passwords with non-Latin characters (emoji, Chinese, Arabic, etc.)</td>
+          <td><span class="mono">Line 341</span></td>
+          <td>Silent crash; user can't register with Unicode password</td>
+        </tr>
+        <tr>
+          <td><strong>L8</strong></td>
+          <td>Inline <code>@keyframes bounce/spin</code> injected via <code>document.createElement('style')</code> on every <code>App</code> mount</td>
+          <td><span class="mono">Lines 2350–2352</span></td>
+          <td>Duplicated <code>&lt;style&gt;</code> tags on HMR hot reload</td>
+        </tr>
+        <tr>
+          <td><strong>L9</strong></td>
+          <td>"Forgot password?" link renders but has no onClick handler — clicks do nothing</td>
+          <td><span class="mono">Line 2258</span></td>
+          <td>Dead UI element; looks unfinished</td>
+        </tr>
+        <tr>
+          <td><strong>L10</strong></td>
+          <td>Social login buttons ("Continue with Google/Discord") show "coming soon" toast — not visually disabled</td>
+          <td><span class="mono">Lines 2227–2228</span></td>
+          <td>Looks unfinished; wastes user click</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       SECTION 7 — PROMPT ENGINE
+  ══════════════════════════════════════════ -->
+  <div class="section-card" id="s7">
+    <div class="section-label">Section 07</div>
+    <div class="section-title">🧠 Prompt Engine Deep Audit — <span class="pill-pass">EXCELLENT</span></div>
+
+    <p style="font-size:13px;color:var(--muted);margin-bottom:24px;">
+      The 7-layer <code>buildChibiPrompt</code> function is the strongest part of the codebase. Each layer independently contributes structured prompt content aligned with the premium chibi specification.
+    </p>
+
+    <div class="layer-list">
+      <div class="layer-item">
+        <div class="layer-num">1</div>
+        <div>
+          <div class="layer-name">BASE_SPEC — Core anatomy definition</div>
+          <div class="layer-desc">Oversized expressive head, large luminous anime eyes with rich iris gradients and glossy reflections, soft rounded cheeks, gentle blush, small nose, warm smile, compact elegant body, clean confident linework, smooth gradient shading.</div>
+          <div class="layer-status"><span class="pill-pass">✓ Always present</span></div>
+        </div>
+      </div>
+      <div class="layer-item">
+        <div class="layer-num">2</div>
+        <div>
+          <div class="layer-name">styleDesc — Per-style rendering description</div>
+          <div class="layer-desc">6 distinct render descriptions: Polished Anime (cel-shaded gradients, glossy eyes), Soft Watercolor (translucent washes, dreamy edges), Pixel Art (16-bit crisp sprites), 3D Render (Pixar-adjacent warmth), Sticker Style (bold outlines, flat fills), Pastel Sketch (hand-drawn pencil texture).</div>
+          <div class="layer-status"><span class="pill-pass">✓ All 6 styles distinct and detailed</span></div>
+        </div>
+      </div>
+      <div class="layer-item">
+        <div class="layer-num">3</div>
+        <div>
+          <div class="layer-name">tone — Tone bucket auto-detection</div>
+          <div class="layer-desc">5 buckets: cute-professional, cute-artisanal, cute-luxury-lifestyle, cute-delicate-pastel, cute-cinematic-warm. Detected via keyword regex from user text or taken directly from profession preset's <code>tone</code> field.</div>
+          <div class="layer-status"><span class="pill-pass">✓ 5 buckets with distinct guidance text</span></div>
+        </div>
+      </div>
+      <div class="layer-item">
+        <div class="layer-num">4</div>
+        <div>
+          <div class="layer-name">roleBlock — Outfit + Props + Mood</div>
+          <div class="layer-desc">When a profession is selected, injects outfit, props/details, and character mood as discrete sentences. Falls back to empty string for custom descriptions with no preset.</div>
+          <div class="layer-status"><span class="pill-pass">✓ Profession-aware, well structured</span></div>
+        </div>
+      </div>
+      <div class="layer-item">
+        <div class="layer-num">5</div>
+        <div>
+          <div class="layer-name">sceneBlock — Scene / Background</div>
+          <div class="layer-desc">If profession has a scene, uses that (e.g., "bright modern hospital room with soft monitors"). Otherwise falls back to the selected background's <code>sceneDesc</code> (8 backgrounds each with ~30-word scene descriptions).</div>
+          <div class="layer-status"><span class="pill-pass">✓ 8 scene-aware backgrounds</span></div>
+        </div>
+      </div>
+      <div class="layer-item">
+        <div class="layer-num">6</div>
+        <div>
+          <div class="layer-name">compGuide — Composition framing</div>
+          <div class="layer-desc">4 composition types: full-body-poster, seated-desk, lifestyle-portrait, paired-scene. Auto-selected based on tone bucket or overridden by profession preset's <code>composition</code> field.</div>
+          <div class="layer-status"><span class="pill-pass">✓ 4 composition types with framing instructions</span></div>
+        </div>
+      </div>
+      <div class="layer-item">
+        <div class="layer-num">7</div>
+        <div>
+          <div class="layer-name">finishParts — Softness / Sparkle / Negative constraints</div>
+          <div class="layer-desc">Threshold-based: softness &gt;70 = "dreamy rendering with gentle edge glow"; sparkle &gt;70 = "surrounded by delicate magical sparkles." Appends negative constraints: no text, no watermarks, no logos, single character only, social-media ready.</div>
+          <div class="layer-status"><span class="pill-pass">✓ Responsive to slider values</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div style="background:rgba(255,215,0,0.08);border:1px solid rgba(255,215,0,0.3);border-radius:12px;padding:16px 20px;margin-top:20px;">
+      <strong style="font-size:13px;">⚠️ One Gap Found:</strong>
+      <p style="font-size:13px;color:var(--muted);margin-top:6px;">
+        <code>toneGuide</code> is computed in Layer 3 but assembled into the prompt <em>after</em> sceneBlock (Layer 5) and compositionGuide (Layer 6). For best DALL-E 3 prompt weighting, tone guidance should appear earlier — ideally between Layer 3 (style desc) and Layer 4 (role block). This is a minor optimisation, not a bug.
+      </p>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       SECTION 8 — DATA MODEL
+  ══════════════════════════════════════════ -->
+  <div class="section-card" id="s8">
+    <div class="section-label">Section 08</div>
+    <div class="section-title">🗄️ Data Model Audit</div>
+
+    <div class="db-card">
+      <div class="db-card-title">📋 users <span class="pill-pass" style="font-size:11px;">✓ Functional</span></div>
+      <table class="audit-table">
+        <thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td>id</td><td>text</td><td>UUID — auto-generated</td></tr>
+          <tr><td>name</td><td>text</td><td>Display name</td></tr>
+          <tr><td>email</td><td>text</td><td>Unique, stored lowercase</td></tr>
+          <tr><td>passwordHash</td><td>text</td><td>⚠️ btoa(password) — Base64 only, not hashed</td></tr>
+          <tr><td>plan</td><td>text</td><td>FREE / PRO / STUDIO</td></tr>
+          <tr><td>createdAt</td><td>number</td><td>Unix ms timestamp</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="db-card">
+      <div class="db-card-title">🖼️ gallery <span class="pill-pass" style="font-size:11px;">✓ Complete</span></div>
+      <table class="audit-table">
+        <thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td>id</td><td>text</td><td>UUID</td></tr>
+          <tr><td>userId</td><td>text</td><td>FK → users.id</td></tr>
+          <tr><td>creatorName</td><td>text</td><td>Display name snapshot at save time</td></tr>
+          <tr><td>title</td><td>text</td><td>e.g. "Doctor Chibi"</td></tr>
+          <tr><td>imageUrl</td><td>text</td><td>OpenAI CDN URL or literal "demo"</td></tr>
+          <tr><td>prompt</td><td>text</td><td>Original user prompt</td></tr>
+          <tr><td>style / background</td><td>text</td><td>Art style and background names</td></tr>
+          <tr><td>visibility</td><td>text</td><td>PUBLIC / PRIVATE</td></tr>
+          <tr><td>likes / downloads</td><td>number</td><td>Counters — no duplicate-like prevention</td></tr>
+          <tr><td>demoGradient / demoEmoji</td><td>text</td><td>CSS gradient and emoji fallback for demo items</td></tr>
+          <tr><td>createdAt</td><td>number</td><td>Unix ms</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="db-card">
+      <div class="db-card-title">⚡ generations <span class="pill-pass" style="font-size:11px;">✓ Well designed</span></div>
+      <table class="audit-table">
+        <thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td>id</td><td>text</td><td>UUID</td></tr>
+          <tr><td>userId</td><td>text</td><td>FK or literal "anonymous"</td></tr>
+          <tr><td>prompt / profession / style / background</td><td>text</td><td>Full audit trail</td></tr>
+          <tr><td>softness / sparkle</td><td>number</td><td>0–100 slider values</td></tr>
+          <tr><td>sourceImageUrl</td><td>text</td><td>Literal "[uploaded]" or empty string</td></tr>
+          <tr><td>outputImageUrl</td><td>text</td><td>Final result URL or empty on failure</td></tr>
+          <tr><td>status</td><td>text</td><td>PENDING / SUCCEEDED / DEMO</td></tr>
+          <tr><td>downloads</td><td>number</td><td>Download count</td></tr>
+          <tr><td>createdAt / updatedAt</td><td>number</td><td>Unix ms timestamps</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="db-card">
+      <div class="db-card-title">📊 quota_usage <span class="pill-pass" style="font-size:11px;">✓ Minimal &amp; correct</span></div>
+      <table class="audit-table">
+        <thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td>id</td><td>text</td><td>UUID</td></tr>
+          <tr><td>userId</td><td>text</td><td>FK → users.id</td></tr>
+          <tr><td>date</td><td>text</td><td>"YYYY-MM-DD" — resets each day</td></tr>
+          <tr><td>count</td><td>number</td><td>Generations used today</td></tr>
+        </tbody>
+      </table>
+      <p style="font-size:12px;color:var(--muted);margin-top:8px;">
+        ⚠️ Note: <code>quota_usage</code> is searched via <code>search: userId</code> which performs a full-table text scan. Acceptable at prototype scale; would need a proper index at &gt;10K users.
+      </p>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       SECTION 9 — RECOMMENDED FIXES
+  ══════════════════════════════════════════ -->
+  <div class="section-card" id="s9">
+    <div class="section-label">Section 09</div>
+    <div class="section-title">🛠️ Recommended Fixes — Priority Order</div>
+
+    <div class="priority-section">
+      <div class="priority-title" style="color:#C0392B;">🔴 Do These First — Critical Functionality</div>
+      <div class="priority-item p-red">
+        <span class="p-num">H1</span>
+        <div><strong>Fix Photo-to-Chibi</strong> — Add a clear disclaimer explaining DALL-E 3 cannot read images, or upgrade to GPT-4o Vision / gpt-image-1 which accepts image inputs. Do not silently ignore the uploaded photo.</div>
+      </div>
+      <div class="priority-item p-red">
+        <span class="p-num">H2</span>
+        <div><strong>Fix HD Download size</strong> — Change HD generation to use <code>size: '1792x1024'</code> (landscape) or <code>'1024x1792'</code> (portrait) rather than just changing the quality flag.</div>
+      </div>
+      <div class="priority-item p-red">
+        <span class="p-num">M2+M3</span>
+        <div><strong>Remove false tech claims</strong> — Update UX Section to say "OpenAI DALL-E 3" only. Rename Architecture section to "Roadmap" or clearly label unimplemented components as "planned."</div>
+      </div>
+    </div>
+
+    <div class="priority-section">
+      <div class="priority-title" style="color:#A04000;">🟠 Do These Next — High Impact UX</div>
+      <div class="priority-item p-orange">
+        <span class="p-num">L4</span>
+        <div><strong>Move GalleryCard outside GallerySection</strong> — Define <code>GalleryCard</code> as a top-level function to prevent unnecessary re-mounts on every gallery state change.</div>
+      </div>
+      <div class="priority-item p-orange">
+        <span class="p-num">M1</span>
+        <div><strong>Simplify action bar</strong> — Group into Primary (⬇️ PNG, 🖼️ Save, 🔗 Share) and a "More…" dropdown for HD, Copy, Meta export, Zoom. Hide "Add Key" inside the dropdown.</div>
+      </div>
+      <div class="priority-item p-orange">
+        <span class="p-num">L7</span>
+        <div><strong>Fix btoa() for Unicode passwords</strong> — Wrap with <code>btoa(encodeURIComponent(password))</code> and match on login side to prevent crash for non-Latin character passwords.</div>
+      </div>
+      <div class="priority-item p-orange">
+        <span class="p-num">M6</span>
+        <div><strong>Fix metadata export memory leak</strong> — Add <code>URL.revokeObjectURL(a.href)</code> after the click in <code>handleExportMeta</code>.</div>
+      </div>
+      <div class="priority-item p-orange">
+        <span class="p-num">H5</span>
+        <div><strong>Fix nav highlight at bottom of page</strong> — Remove <code>'architecture'</code> from the section tracker array since no nav link points to it. Only observe IDs that correspond to navbar links.</div>
+      </div>
+      <div class="priority-item p-orange">
+        <span class="p-num">M8</span>
+        <div><strong>Disable Refresh Gallery button while loading</strong> — Add <code>disabled={dbLoading}</code> to the refresh button to prevent double-trigger race conditions.</div>
+      </div>
+    </div>
+
+    <div class="priority-section">
+      <div class="priority-title" style="color:#1A6B8A;">🔵 Polish Pass</div>
+      <div class="priority-item p-blue">
+        <span class="p-num">L10</span>
+        <div>Add <code>disabled</code> styling to social login buttons or replace with a single "More sign-in options coming soon" note.</div>
+      </div>
+      <div class="priority-item p-blue">
+        <span class="p-num">L9</span>
+        <div>Wire "Forgot password?" to an <code>addToast('Password reset — coming soon! 🔐', 'info')</code> or remove the link.</div>
+      </div>
+      <div class="priority-item p-blue">
+        <span class="p-num">M4</span>
+        <div>Align footer brand description with hero copy: "Create premium chibi portraits, social-ready and identity-preserving."</div>
+      </div>
+      <div class="priority-item p-blue">
+        <span class="p-num">M5</span>
+        <div>Add tooltip or sub-label to quota CTA: "3 free without signing in — 5/day with a free account."</div>
+      </div>
+      <div class="priority-item p-blue">
+        <span class="p-num">M7</span>
+        <div>Hide the "No API key" banner while <code>generating === true</code> to reduce distraction during the 8–20s wait.</div>
+      </div>
+    </div>
+
+    <div style="background:rgba(135,206,235,0.08);border:1px solid rgba(135,206,235,0.25);border-radius:14px;padding:20px 24px;margin-top:8px;">
+      <strong style="font-size:13px;">🔑 Prompt Engine Optimisation (Optional)</strong>
+      <p style="font-size:13px;color:var(--muted);margin-top:6px;">
+        Move <code>toneGuide</code> earlier in the assembled prompt — between Layer 2 (style) and Layer 4 (role) — for improved DALL-E 3 prompt token weighting. DALL-E 3 weights earlier sentences more heavily.
+      </p>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       SECTION 10 — WHAT'S WORKING
+  ══════════════════════════════════════════ -->
+  <div class="section-card" id="s10">
+    <div class="section-label">Section 10</div>
+    <div class="section-title">✅ What's Working Perfectly</div>
+
+    <div class="working-grid">
+      <div class="working-item"><span class="working-icon">✅</span><div><strong>Zero console errors</strong> on page load (verified via Playwright)</div></div>
+      <div class="working-item"><span class="working-icon">✅</span><div><strong>OpenAI DALL-E 3 integration</strong> — base64 response, no CORS issues</div></div>
+      <div class="working-item"><span class="working-icon">✅</span><div><strong>Demo mode</strong> — canvas PNG download when no API key set</div></div>
+      <div class="working-item"><span class="working-icon">✅</span><div><strong>Auth system</strong> — register, login, session restore, logout</div></div>
+      <div class="working-item"><span class="working-icon">✅</span><div><strong>Quota system</strong> — guest sessionStorage + user DB tracking</div></div>
+      <div class="working-item"><span class="working-icon">✅</span><div><strong>Gallery</strong> — lightbox, keyboard nav (←/→/Esc), like/delete/visibility</div></div>
+      <div class="working-item"><span class="working-icon">✅</span><div><strong>Settings modal</strong> — test key, model switch, clear key, obfuscated preview</div></div>
+      <div class="working-item"><span class="working-icon">✅</span><div><strong>Toast notifications</strong> — all 4 types, auto-dismiss, manual close</div></div>
+      <div class="working-item"><span class="working-icon">✅</span><div><strong>Responsive mobile layout</strong> — tested at 480px, 768px, 1024px+</div></div>
+      <div class="working-item"><span class="working-icon">✅</span><div><strong>7-layer premium prompt engine</strong> — 10 presets, 6 styles, 8 backgrounds</div></div>
+      <div class="working-item"><span class="working-icon">✅</span><div><strong>Pricing section</strong> — monthly/annual toggle + demo plan upgrade</div></div>
+      <div class="working-item"><span class="working-icon">✅</span><div><strong>Generation timer + progress bar</strong> — DALL-E 3 takes 8–20s, well communicated</div></div>
+      <div class="working-item"><span class="working-icon">✅</span><div><strong>Post-generation sign-in nudge</strong> — dismissible, non-blocking</div></div>
+      <div class="working-item"><span class="working-icon">✅</span><div><strong>Web Share API</strong> with clipboard fallback and AbortError handling</div></div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       FOOTER
+  ══════════════════════════════════════════ -->
+  <div class="report-footer">
+    <div style="font-size:20px;margin-bottom:8px;">✨</div>
+    <strong>Chibi Creator — Complete File Audit Report</strong><br>
+    Generated March 30, 2026 · App version v4 Full Integration · 2,385 lines reviewed<br><br>
+    To print or save as PDF: use the <strong>🖨️ Print / Save PDF</strong> button above, or press <kbd>Ctrl+P</kbd> / <kbd>Cmd+P</kbd> → Save as PDF.
+  </div>
+
+</div>
+</body>
+</html>

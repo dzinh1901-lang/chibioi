@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chibi Creator — AI Chibi Character Generator · iOS & Android</title>
+  <meta name="description" content="The #1 AI chibi character generator. Create adorable anime chibi art from text or your photo in under 10 seconds. Free on iOS & Android." />
+
+  <!-- OG / Social -->
+  <meta property="og:title"       content="Chibi Creator — Create Your Own Adorable Chibi ✨" />
+  <meta property="og:description" content="AI-powered chibi generator. Type a prompt or upload a photo. 6 art styles, 4K export, free to start." />
+  <meta property="og:type"        content="website" />
+  <meta property="og:image"       content="images/og-preview.png" />
+  <meta name="twitter:card"       content="summary_large_image" />
+  <meta name="theme-color"        content="#FFD6C0" />
+  <link rel="canonical"           href="https://chibicreator.app/landing" />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="css/landing.css" />
+</head>
+<body>
+
+  <!-- ══════════════════════════════════════════════════════
+       NAV
+  ═══════════════════════════════════════════════════════════ -->
+  <header class="lp-nav" id="lpNav">
+    <div class="lp-nav-inner">
+
+      <a href="landing.html" class="lp-logo">
+        <span class="lp-logo-icon">✨</span>
+        <span>Chibi Creator</span>
+      </a>
+
+      <nav class="lp-nav-links" aria-label="Main navigation">
+        <a href="#features">Features</a>
+        <a href="#howit">How It Works</a>
+        <a href="#gallery">Gallery</a>
+        <a href="#pricing">Pricing</a>
+        <a href="index.html" class="lp-nav-web-btn">Web App →</a>
+      </nav>
+
+      <div class="lp-nav-right">
+        <a href="#download" class="lp-btn lp-btn-gold lp-nav-app-btn" data-store="ios">📱 Get the App</a>
+        <button class="lp-hamburger" id="lpHamburger" aria-label="Open menu" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile nav drawer -->
+    <div class="lp-mobile-nav" id="lpMobileNav" role="navigation" aria-label="Mobile navigation">
+      <a href="#features"  class="lp-mobile-link" data-close>⚡ Features</a>
+      <a href="#howit"     class="lp-mobile-link" data-close>🪄 How It Works</a>
+      <a href="#gallery"   class="lp-mobile-link" data-close>🖼️ Gallery</a>
+      <a href="#pricing"   class="lp-mobile-link" data-close>💎 Pricing</a>
+      <a href="index.html" class="lp-mobile-link">💻 Open Web App</a>
+      <div class="lp-mobile-app-btns">
+        <a href="#" class="lp-store-btn lp-store-ios" data-close data-store="ios">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.37 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z" fill="currentColor"/></svg>
+          <span><small>Download on the</small>App Store</span>
+        </a>
+        <a href="#" class="lp-store-btn lp-store-android" data-close data-store="android">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M3.18 23.76c.34.2.72.24 1.08.12L14.9 12 4.26.12A1.5 1.5 0 003.18.24C2.47.65 2 1.4 2 2.28v19.44c0 .88.47 1.63 1.18 2.04zM17.63 8.76L5.8.5l9.35 9.35 2.48-1.09zm0 6.48l-2.48-1.09L5.8 23.5l11.83-8.26zM20.5 10.5l-1.86-1.04-2.77 2.54 2.77 2.54 1.9-1.06c.54-.3.87-.86.87-1.48 0-.62-.35-1.2-.91-1.5z" fill="currentColor"/></svg>
+          <span><small>Get it on</small>Google Play</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+
+  <!-- ══════════════════════════════════════════════════════
+       HERO
+  ═══════════════════════════════════════════════════════════ -->
+  <section class="lp-hero" id="hero">
+
+    <!-- Decorative bg layers -->
+    <div class="lp-hero-bg"></div>
+    <div class="lp-blob lp-blob-1"></div>
+    <div class="lp-blob lp-blob-2"></div>
+    <div class="lp-blob lp-blob-3"></div>
+
+    <!-- Floating kawaii shapes -->
+    <div class="lp-float lp-float-a" aria-hidden="true">✨</div>
+    <div class="lp-float lp-float-b" aria-hidden="true">⭐</div>
+    <div class="lp-float lp-float-c" aria-hidden="true">💫</div>
+    <div class="lp-float lp-float-d" aria-hidden="true">🌟</div>
+    <div class="lp-float lp-float-e" aria-hidden="true">✦</div>
+
+    <!-- Sparkle particles container (JS fills this) -->
+    <div class="lp-sparks" id="lpSparks" aria-hidden="true"></div>
+
+    <div class="lp-hero-inner">
+
+      <!-- ── LEFT: Text block ── -->
+      <div class="lp-hero-text">
+
+        <div class="lp-hero-eyebrow">
+          <span class="lp-dot-live" aria-hidden="true"></span>
+          Now available on iOS &amp; Android
+        </div>
+
+        <h1 class="lp-hero-h1">
+          Create <em>Your Own</em><br />
+          Adorable<br />
+          <span class="lp-grad-text">Chibi Character</span>
+        </h1>
+
+        <p class="lp-hero-sub">
+          Type a description, pick a profession, or snap a selfie.
+          Our AI renders stunning anime chibi art in&nbsp;under&nbsp;10&nbsp;seconds.
+          <strong>Free to start.</strong>
+        </p>
+
+        <!-- Primary Mobile App CTAs -->
+        <div class="lp-store-row">
+          <a href="#" class="lp-store-btn lp-store-ios" id="heroIosCta" data-store="ios" aria-label="Download Chibi Creator on the App Store">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.37 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z" fill="currentColor"/></svg>
+            <span>
+              <small>Download on the</small>
+              App Store
+            </span>
+          </a>
+          <a href="#" class="lp-store-btn lp-store-android" id="heroAndroidCta" data-store="android" aria-label="Get Chibi Creator on Google Play">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3.18 23.76c.34.2.72.24 1.08.12L14.9 12 4.26.12A1.5 1.5 0 003.18.24C2.47.65 2 1.4 2 2.28v19.44c0 .88.47 1.63 1.18 2.04zM17.63 8.76L5.8.5l9.35 9.35 2.48-1.09zm0 6.48l-2.48-1.09L5.8 23.5l11.83-8.26zM20.5 10.5l-1.86-1.04-2.77 2.54 2.77 2.54 1.9-1.06c.54-.3.87-.86.87-1.48 0-.62-.35-1.2-.91-1.5z" fill="currentColor"/></svg>
+            <span>
+              <small>Get it on</small>
+              Google Play
+            </span>
+          </a>
+        </div>
+
+        <!-- Secondary CTA: Web App -->
+        <div class="lp-hero-alt-cta">
+          <a href="index.html" class="lp-hero-web-link">
+            Or try the web app first →
+          </a>
+        </div>
+
+        <!-- Social proof bar -->
+        <div class="lp-hero-social-proof">
+          <div class="lp-avatars" aria-hidden="true">
+            <div class="lp-av" style="background:linear-gradient(135deg,#FFB6C1,#FFD6C0)">🌸</div>
+            <div class="lp-av" style="background:linear-gradient(135deg,#87CEEB,#B0D4FF)">⭐</div>
+            <div class="lp-av" style="background:linear-gradient(135deg,#F0C674,#FFE88A)">✨</div>
+            <div class="lp-av" style="background:linear-gradient(135deg,#C8F0B8,#A8E8A0)">🌟</div>
+          </div>
+          <div class="lp-proof-text">
+            <strong>50,000+</strong> chibis created by <strong>12,000+</strong> happy creators
+            <div class="lp-stars" aria-label="4.9 out of 5 stars">★★★★★ <span>4.9 / 5</span></div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ── RIGHT: Phone mockup ── -->
+      <div class="lp-hero-phone" data-reveal data-delay="150">
+        <div class="lp-phone-wrap">
+
+          <!-- Phone shell -->
+          <div class="lp-phone" role="img" aria-label="Chibi Creator app screenshot">
+            <div class="lp-phone-notch"></div>
+            <div class="lp-phone-screen">
+              <div class="lp-app-ui">
+                <div class="lp-app-topbar">
+                  <span class="lp-app-logo-sm">✨ Chibi Creator</span>
+                  <div class="lp-app-avatar" aria-hidden="true">S</div>
+                </div>
+                <div class="lp-app-prompt-box">
+                  <div class="lp-app-prompt-label">Describe your character</div>
+                  <div class="lp-app-prompt-text">A cheerful pilot with golden<br/>wings &amp; aviator glasses ✈️</div>
+                </div>
+                <div class="lp-app-result-box" id="phoneResultBox">
+                  <div class="lp-app-chibi-placeholder lp-chibi-anim-1">
+                    <div class="lp-chibi-body">✈️</div>
+                    <div class="lp-chibi-face">😊</div>
+                    <div class="lp-chibi-sparkle s1" aria-hidden="true">✨</div>
+                    <div class="lp-chibi-sparkle s2" aria-hidden="true">⭐</div>
+                    <div class="lp-chibi-sparkle s3" aria-hidden="true">💫</div>
+                  </div>
+                  <div class="lp-app-gen-label">AI Generated ✨</div>
+                </div>
+                <div class="lp-app-tags" aria-label="Art style options">
+                  <span class="lp-tag active">Polished Anime</span>
+                  <span class="lp-tag">Watercolor</span>
+                  <span class="lp-tag">Pixel Art</span>
+                </div>
+                <div class="lp-app-actions">
+                  <button class="lp-app-gen-btn" aria-label="Generate chibi">✨ Generate</button>
+                  <button class="lp-app-save-btn" aria-label="Save to gallery">🖼️</button>
+                </div>
+              </div>
+            </div>
+            <div class="lp-phone-home-bar"></div>
+          </div>
+
+          <!-- Floating character cards -->
+          <div class="lp-card-float lp-cf-1" aria-hidden="true">
+            <div class="lp-cf-img">🩺</div>
+            <div class="lp-cf-name">Dr. Sakura</div>
+          </div>
+          <div class="lp-card-float lp-cf-2" aria-hidden="true">
+            <div class="lp-cf-img">🧁</div>
+            <div class="lp-cf-name">Chef Mochi</div>
+          </div>
+          <div class="lp-card-float lp-cf-3" aria-hidden="true">
+            <div class="lp-cf-img">🔬</div>
+            <div class="lp-cf-name">Dr. Lab</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Scroll hint -->
+    <div class="lp-scroll-hint" aria-hidden="true">
+      <div class="lp-scroll-mouse"><div class="lp-scroll-dot"></div></div>
+      <span>Scroll to explore</span>
+    </div>
+  </section>
+
+
+  <!-- ══════════════════════════════════════════════════════
+       TICKER STRIP
+  ═══════════════════════════════════════════════════════════ -->
+  <div class="lp-ticker" aria-hidden="true">
+    <div class="lp-ticker-track">
+      <span>✨ Text to Chibi</span><span>·</span>
+      <span>📸 Photo to Chibi</span><span>·</span>
+      <span>🩺 Doctor</span><span>·</span>
+      <span>🧁 Pastry Chef</span><span>·</span>
+      <span>🔬 Scientist</span><span>·</span>
+      <span>✈️ Pilot</span><span>·</span>
+      <span>⚙️ Engineer</span><span>·</span>
+      <span>🥁 Marching Band</span><span>·</span>
+      <span>🎨 6 Art Styles</span><span>·</span>
+      <span>🌅 6 Backgrounds</span><span>·</span>
+      <span>⬇️ 4K Export</span><span>·</span>
+      <span>💳 Free Forever</span><span>·</span>
+      <span>📱 iOS &amp; Android</span><span>·</span>
+      <!-- duplicate for infinite loop -->
+      <span>✨ Text to Chibi</span><span>·</span>
+      <span>📸 Photo to Chibi</span><span>·</span>
+      <span>🩺 Doctor</span><span>·</span>
+      <span>🧁 Pastry Chef</span><span>·</span>
+      <span>🔬 Scientist</span><span>·</span>
+      <span>✈️ Pilot</span><span>·</span>
+      <span>⚙️ Engineer</span><span>·</span>
+      <span>🥁 Marching Band</span><span>·</span>
+      <span>🎨 6 Art Styles</span><span>·</span>
+      <span>🌅 6 Backgrounds</span><span>·</span>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════════════════
+       STATS BAR
+  ═══════════════════════════════════════════════════════════ -->
+  <section class="lp-stats" aria-label="Key statistics">
+    <div class="lp-inner">
+      <div class="lp-stat-item" data-reveal>
+        <div class="lp-stat-num" data-count="50000">0</div>
+        <div class="lp-stat-label">Chibis Created</div>
+      </div>
+      <div class="lp-stat-divider" aria-hidden="true"></div>
+      <div class="lp-stat-item" data-reveal data-delay="80">
+        <div class="lp-stat-num" data-count="12000">0</div>
+        <div class="lp-stat-label">Happy Creators</div>
+      </div>
+      <div class="lp-stat-divider" aria-hidden="true"></div>
+      <div class="lp-stat-item" data-reveal data-delay="160">
+        <div class="lp-stat-num">&lt;10s</div>
+        <div class="lp-stat-label">Generation Time</div>
+      </div>
+      <div class="lp-stat-divider" aria-hidden="true"></div>
+      <div class="lp-stat-item" data-reveal data-delay="240">
+        <div class="lp-stat-num">4.9 ★</div>
+        <div class="lp-stat-label">App Store Rating</div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ══════════════════════════════════════════════════════
+       FEATURES
+  ═══════════════════════════════════════════════════════════ -->
+  <section class="lp-section lp-features" id="features">
+    <div class="lp-inner">
+
+      <div class="lp-section-header" data-reveal>
+        <div class="lp-eyebrow">⚡ FEATURES</div>
+        <h2>Everything you need to create magical chibis</h2>
+        <p>From quick text prompts to detailed photo transformations — the most complete chibi generator ever made.</p>
+      </div>
+
+      <div class="lp-features-grid">
+
+        <!-- Hero feature: text-to-chibi demo -->
+        <div class="lp-feat-card lp-feat-hero-card" data-reveal>
+          <div class="lp-feat-hero-visual">
+            <div class="lp-text2chibi-demo">
+              <div class="lp-demo-input">
+                <span class="lp-demo-cursor"></span>
+              </div>
+              <div class="lp-demo-arrow" aria-hidden="true">↓ AI Magic ✨</div>
+              <div class="lp-demo-output">
+                <div class="lp-demo-chibi" style="background:linear-gradient(135deg,#FFB6C1,#D4C0FF)">
+                  <div style="font-size:44px">🛡️</div>
+                  <div class="lp-demo-sparkles" aria-hidden="true">✨⭐💫</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="lp-feat-content">
+            <div class="lp-feat-icon" aria-hidden="true">📝</div>
+            <h3>Text to Chibi</h3>
+            <p>Describe any character in natural language. Our AI understands personality, outfit, accessories, expressions, and mood perfectly.</p>
+            <ul class="lp-feat-list">
+              <li>✓ Natural language prompts up to 500 chars</li>
+              <li>✓ 6 profession presets to start instantly</li>
+              <li>✓ Ctrl+Enter shortcut for fast generation</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Photo to Chibi -->
+        <div class="lp-feat-card" data-reveal data-delay="60">
+          <div class="lp-feat-icon-lg" aria-hidden="true">📸</div>
+          <h3>Photo to Chibi</h3>
+          <p>Upload a selfie or any portrait. The AI preserves your facial features and hairstyle while rendering an adorable chibi version.</p>
+          <div class="lp-feat-badge">PRO</div>
+        </div>
+
+        <!-- Profession Presets -->
+        <div class="lp-feat-card" data-reveal data-delay="120">
+          <div class="lp-feat-icon-lg" aria-hidden="true">🎭</div>
+          <h3>Profession Presets</h3>
+          <p>One-tap templates for Doctor, Pastry Chef, Scientist, Pilot, Engineer, and Marching Band — plus unlimited custom prompts.</p>
+        </div>
+
+        <!-- Art Styles -->
+        <div class="lp-feat-card" data-reveal data-delay="180">
+          <div class="lp-feat-icon-lg" aria-hidden="true">🎨</div>
+          <h3>6 Art Styles</h3>
+          <p>Polished Anime, Soft Watercolor, Pixel Art, 3D Render, Sticker Style, and Pastel Sketch. Switch styles in one tap.</p>
+        </div>
+
+        <!-- Backgrounds -->
+        <div class="lp-feat-card" data-reveal data-delay="240">
+          <div class="lp-feat-icon-lg" aria-hidden="true">🌅</div>
+          <h3>Magic Backgrounds</h3>
+          <p>Cherry Blossom Garden, Soft Glow Studio, Moonlit Night, Cloud Kingdom, Festival Lights, Fantasy Castle and more.</p>
+        </div>
+
+        <!-- CTA card -->
+        <div class="lp-feat-card lp-feat-cta-card" data-reveal data-delay="300">
+          <div class="lp-feat-cta-inner">
+            <div style="font-size:52px;margin-bottom:16px" aria-hidden="true">📱</div>
+            <h3>Get the full experience on your phone</h3>
+            <p style="font-size:14px;margin-bottom:20px;opacity:.8">Camera integration, push notifications, offline gallery, exclusive sticker packs.</p>
+            <a href="#download" class="lp-btn lp-btn-gold">Download the App — Free</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ══════════════════════════════════════════════════════
+       HOW IT WORKS
+  ═══════════════════════════════════════════════════════════ -->
+  <section class="lp-section lp-how" id="howit">
+    <div class="lp-inner">
+
+      <div class="lp-section-header" data-reveal>
+        <div class="lp-eyebrow">🪄 HOW IT WORKS</div>
+        <h2>Three steps to chibi magic</h2>
+        <p>No design skills needed. No complicated settings. Just pure creative fun.</p>
+      </div>
+
+      <div class="lp-steps">
+        <div class="lp-step" data-reveal>
+          <div class="lp-step-num" aria-hidden="true">01</div>
+          <div class="lp-step-icon-wrap">
+            <div class="lp-step-icon" aria-hidden="true">📝</div>
+          </div>
+          <h3>Describe or Upload</h3>
+          <p>Type a description of your dream chibi character, or upload a photo to transform into chibi art.</p>
+        </div>
+
+        <div class="lp-step-arrow" aria-hidden="true">→</div>
+
+        <div class="lp-step" data-reveal data-delay="120">
+          <div class="lp-step-num" aria-hidden="true">02</div>
+          <div class="lp-step-icon-wrap" style="background:linear-gradient(135deg,rgba(240,198,116,0.15),rgba(255,182,193,0.1))">
+            <div class="lp-step-icon" aria-hidden="true">🎨</div>
+          </div>
+          <h3>Customize the Vibe</h3>
+          <p>Choose your art style, background, and fine-tune softness and sparkle to get exactly the aesthetic you want.</p>
+        </div>
+
+        <div class="lp-step-arrow" aria-hidden="true">→</div>
+
+        <div class="lp-step" data-reveal data-delay="240">
+          <div class="lp-step-num" aria-hidden="true">03</div>
+          <div class="lp-step-icon-wrap" style="background:linear-gradient(135deg,rgba(135,206,235,0.15),rgba(176,212,255,0.1))">
+            <div class="lp-step-icon" aria-hidden="true">⬇️</div>
+          </div>
+          <h3>Download &amp; Share</h3>
+          <p>Export in PNG or 4K HD. Save to your gallery, share with friends, or post directly to social media.</p>
+        </div>
+      </div>
+
+      <!-- Demo phones strip -->
+      <div class="lp-demo-strip" data-reveal>
+        <div class="lp-demo-phones">
+          <div class="lp-demo-phone lp-dp-1">
+            <div class="lp-dp-screen" style="background:linear-gradient(135deg,#FFE8E0,#FFD6C0)">
+              <div style="font-size:13px;font-weight:700;color:#2D2D3F;padding:12px 12px 6px">📝 Your prompt</div>
+              <div style="font-size:10px;color:#6B6B8D;padding:0 12px;line-height:1.5">"A cheerful scientist with rainbow hair holding a glowing beaker"</div>
+              <div style="text-align:center;padding:10px;font-size:34px">🔬</div>
+              <div style="margin:0 12px;background:linear-gradient(135deg,#F0C674,#FFB6C1);border-radius:20px;padding:8px;text-align:center;font-size:11px;font-weight:700;color:white">✨ Generate</div>
+            </div>
+            <div class="lp-dp-label">Step 1 · Prompt</div>
+          </div>
+          <div class="lp-demo-arrow-vert" aria-hidden="true">↓</div>
+          <div class="lp-demo-phone lp-dp-2">
+            <div class="lp-dp-screen" style="background:linear-gradient(135deg,#C8F0B8,#87CEEB)">
+              <div style="font-size:11px;font-weight:700;color:white;padding:12px 12px 4px;text-shadow:0 1px 3px rgba(0,0,0,.2)">✨ Your Chibi</div>
+              <div style="display:flex;align-items:center;justify-content:center;padding:16px;flex-direction:column;gap:4px">
+                <div style="width:65px;height:80px;background:rgba(255,255,255,.3);border-radius:32px 32px 28px 28px;display:flex;align-items:center;justify-content:center;font-size:34px">🔬</div>
+                <div style="font-size:9px;color:rgba(255,255,255,.85);font-weight:600">AI Generated ✨</div>
+              </div>
+            </div>
+            <div class="lp-dp-label">Step 2 · Result</div>
+          </div>
+          <div class="lp-demo-arrow-vert" aria-hidden="true">↓</div>
+          <div class="lp-demo-phone lp-dp-3">
+            <div class="lp-dp-screen" style="background:linear-gradient(135deg,#2D2D3F,#3d3480)">
+              <div style="font-size:11px;font-weight:700;color:rgba(255,255,255,.9);padding:12px 12px 4px">⬇️ Export</div>
+              <div style="padding:8px 12px;display:flex;flex-direction:column;gap:5px">
+                <div style="background:rgba(255,255,255,.1);border-radius:10px;padding:7px;font-size:10px;color:white;text-align:center">⬇ PNG Standard</div>
+                <div style="background:linear-gradient(135deg,#F0C674,#FFB6C1);border-radius:10px;padding:7px;font-size:10px;font-weight:700;color:white;text-align:center">⬇ 4K HD — PRO ⭐</div>
+                <div style="background:rgba(255,255,255,.1);border-radius:10px;padding:7px;font-size:10px;color:white;text-align:center">🔗 Share Link</div>
+              </div>
+            </div>
+            <div class="lp-dp-label">Step 3 · Share</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ══════════════════════════════════════════════════════
+       GALLERY SHOWCASE
+  ═══════════════════════════════════════════════════════════ -->
+  <section class="lp-section lp-gallery-sec" id="gallery">
+    <div class="lp-inner">
+
+      <div class="lp-section-header" data-reveal>
+        <div class="lp-eyebrow">🖼️ COMMUNITY GALLERY</div>
+        <h2>Made by our community</h2>
+        <p>Real chibis created by real people — every single day.</p>
+      </div>
+
+      <div class="lp-gallery-grid" role="list" aria-label="Community gallery">
+        <div class="lp-gcard" data-reveal role="listitem" style="--delay:0s">
+          <div class="lp-gcard-img" style="background:linear-gradient(135deg,#FFB6C1,#FFD6C0)"><span aria-hidden="true">🩺</span></div>
+          <div class="lp-gcard-info"><b>Dr. Sparkles</b><span>❤️ 142</span></div>
+        </div>
+        <div class="lp-gcard" data-reveal role="listitem" style="--delay:.05s">
+          <div class="lp-gcard-img" style="background:linear-gradient(135deg,#87CEEB,#B0D4FF)"><span aria-hidden="true">🧁</span></div>
+          <div class="lp-gcard-info"><b>Chef Mochi</b><span>❤️ 213</span></div>
+        </div>
+        <div class="lp-gcard" data-reveal role="listitem" style="--delay:.1s">
+          <div class="lp-gcard-img" style="background:linear-gradient(135deg,#C8F0B8,#A8E8A0)"><span aria-hidden="true">🔬</span></div>
+          <div class="lp-gcard-info"><b>Science Bunny</b><span>❤️ 98</span></div>
+        </div>
+        <div class="lp-gcard lp-gcard-tall" data-reveal role="listitem" style="--delay:.15s">
+          <div class="lp-gcard-img" style="background:linear-gradient(135deg,#1a1a3e,#7760C0)"><span aria-hidden="true">🌙</span></div>
+          <div class="lp-gcard-info"><b>Moon Healer</b><span>❤️ 445</span></div>
+        </div>
+        <div class="lp-gcard" data-reveal role="listitem" style="--delay:.2s">
+          <div class="lp-gcard-img" style="background:linear-gradient(135deg,#F0C674,#FFD700)"><span aria-hidden="true">✈️</span></div>
+          <div class="lp-gcard-info"><b>Capt. Fluffy</b><span>❤️ 178</span></div>
+        </div>
+        <div class="lp-gcard" data-reveal role="listitem" style="--delay:.25s">
+          <div class="lp-gcard-img" style="background:linear-gradient(135deg,#D4C0FF,#C0B0FF)"><span aria-hidden="true">⚙️</span></div>
+          <div class="lp-gcard-info"><b>Gear Girl</b><span>❤️ 89</span></div>
+        </div>
+        <div class="lp-gcard" data-reveal role="listitem" style="--delay:.3s">
+          <div class="lp-gcard-img" style="background:linear-gradient(135deg,#FF9AA8,#FFB6C1)"><span aria-hidden="true">🥁</span></div>
+          <div class="lp-gcard-info"><b>Band Star</b><span>❤️ 267</span></div>
+        </div>
+        <div class="lp-gcard lp-gcard-tall" data-reveal role="listitem" style="--delay:.35s">
+          <div class="lp-gcard-img" style="background:linear-gradient(135deg,#C8E8FF,#87CEEB)"><span aria-hidden="true">☁️</span></div>
+          <div class="lp-gcard-info"><b>Cloud Princess</b><span>❤️ 312</span></div>
+        </div>
+      </div>
+
+      <div class="lp-gallery-cta" data-reveal>
+        <p>Join 12,000+ creators and start making your own chibi art today.</p>
+        <a href="#download" class="lp-btn lp-btn-gold lp-btn-lg">✨ Create Your First Chibi — It's Free</a>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ══════════════════════════════════════════════════════
+       MOBILE APP BANNER  ← PRIMARY MOBILE CTA SECTION
+  ═══════════════════════════════════════════════════════════ -->
+  <section class="lp-app-banner" id="download" aria-label="Download the Chibi Creator mobile app">
+    <div class="lp-app-banner-bg" aria-hidden="true"></div>
+    <div class="lp-app-banner-glow g1" aria-hidden="true"></div>
+    <div class="lp-app-banner-glow g2" aria-hidden="true"></div>
+
+    <div class="lp-inner lp-app-banner-inner">
+
+      <!-- Left: Text + CTAs -->
+      <div class="lp-app-banner-text" data-reveal>
+
+        <div class="lp-eyebrow" style="color:var(--gold-s)">📱 MOBILE APP</div>
+
+        <h2 class="lp-app-banner-h2">
+          Chibi Creator<br />
+          in your pocket
+        </h2>
+
+        <p class="lp-app-banner-sub">
+          Generate, customize, and share adorable chibis wherever you are.
+          The full studio experience — optimized for touch, available offline,
+          packed with exclusive mobile-only features.
+        </p>
+
+        <!-- App perks -->
+        <ul class="lp-app-perks">
+          <li><span class="lp-perk-icon" aria-hidden="true">🔔</span> <strong>Push notifications</strong> when your chibi is ready</li>
+          <li><span class="lp-perk-icon" aria-hidden="true">📷</span> <strong>Use your camera directly</strong> — no upload needed</li>
+          <li><span class="lp-perk-icon" aria-hidden="true">💾</span> <strong>Save to Camera Roll</strong> in one tap</li>
+          <li><span class="lp-perk-icon" aria-hidden="true">🌐</span> <strong>Offline gallery</strong> access &amp; cross-device sync</li>
+          <li><span class="lp-perk-icon" aria-hidden="true">🎁</span> <strong>Exclusive mobile sticker packs</strong> — not on web</li>
+          <li><span class="lp-perk-icon" aria-hidden="true">⚡</span> <strong>Faster generation</strong> with mobile-optimised pipeline</li>
+        </ul>
+
+        <!-- ── PRIMARY STORE CTAs ── -->
+        <div class="lp-store-row lp-store-row-lg">
+          <a href="#" class="lp-store-btn lp-store-ios" id="bannerIosCta" data-store="ios" aria-label="Download Chibi Creator on the App Store">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.37 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z" fill="currentColor"/></svg>
+            <span>
+              <small>Download on the</small>
+              App Store
+            </span>
+          </a>
+          <a href="#" class="lp-store-btn lp-store-android" id="bannerAndroidCta" data-store="android" aria-label="Get Chibi Creator on Google Play">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3.18 23.76c.34.2.72.24 1.08.12L14.9 12 4.26.12A1.5 1.5 0 003.18.24C2.47.65 2 1.4 2 2.28v19.44c0 .88.47 1.63 1.18 2.04zM17.63 8.76L5.8.5l9.35 9.35 2.48-1.09zm0 6.48l-2.48-1.09L5.8 23.5l11.83-8.26zM20.5 10.5l-1.86-1.04-2.77 2.54 2.77 2.54 1.9-1.06c.54-.3.87-.86.87-1.48 0-.62-.35-1.2-.91-1.5z" fill="currentColor"/></svg>
+            <span>
+              <small>Get it on</small>
+              Google Play
+            </span>
+          </a>
+        </div>
+
+        <p class="lp-app-small-note">Free download · In-app purchases available · iOS 15+ · Android 8+</p>
+
+        <!-- Early access / notify form -->
+        <div class="lp-notify-wrap">
+          <div class="lp-notify-label">🔔 Get notified when we launch in your region:</div>
+          <form class="lp-notify-form" id="notifyForm" novalidate>
+            <input type="email" class="lp-notify-input" placeholder="your@email.com" required aria-label="Email address for launch notification" />
+            <button type="submit" class="lp-btn lp-btn-peach">Notify Me</button>
+          </form>
+          <div class="lp-notify-success" id="notifySuccess" role="alert">
+            🎉 You're on the list! We'll ping you when we launch.
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Right: Dark phone mockup -->
+      <div class="lp-app-banner-phone" data-reveal data-delay="100">
+        <div class="lp-phone lp-phone-dark" role="img" aria-label="Chibi Creator mobile gallery screenshot">
+          <div class="lp-phone-notch"></div>
+          <div class="lp-phone-screen">
+            <div class="lp-app-ui lp-app-ui-dark">
+              <div class="lp-app-topbar lp-dark-bar">
+                <span class="lp-app-logo-sm" style="color:white">✨ Chibi Creator</span>
+                <div class="lp-app-avatar" style="background:linear-gradient(135deg,#F0C674,#FFB6C1)" aria-hidden="true">S</div>
+              </div>
+              <!-- Gallery rows -->
+              <div class="lp-dark-gallery">
+                <div class="lp-dark-grow">
+                  <div class="lp-dg" style="background:linear-gradient(135deg,#FFB6C1,#FFD6C0)"><span aria-hidden="true">🩺</span></div>
+                  <div class="lp-dg" style="background:linear-gradient(135deg,#87CEEB,#B0D4FF)"><span aria-hidden="true">🧁</span></div>
+                </div>
+                <div class="lp-dark-grow">
+                  <div class="lp-dg lp-dg-wide" style="background:linear-gradient(135deg,#1a1a3e,#7760C0)">
+                    <span aria-hidden="true">🌙</span>
+                    <span style="font-size:9px;color:rgba(255,255,255,.7)">Moon Healer ❤️ 445</span>
+                  </div>
+                </div>
+                <div class="lp-dark-grow">
+                  <div class="lp-dg" style="background:linear-gradient(135deg,#F0C674,#FFD700)"><span aria-hidden="true">✈️</span></div>
+                  <div class="lp-dg" style="background:linear-gradient(135deg,#C8F0B8,#A8E8A0)"><span aria-hidden="true">🔬</span></div>
+                </div>
+              </div>
+              <!-- Bottom nav -->
+              <div class="lp-dark-nav" aria-hidden="true">
+                <div class="lp-dark-nav-item active">🏠</div>
+                <div class="lp-dark-nav-item">✨</div>
+                <div class="lp-dark-nav-item">🖼️</div>
+                <div class="lp-dark-nav-item">👤</div>
+              </div>
+            </div>
+          </div>
+          <div class="lp-phone-home-bar"></div>
+        </div>
+
+        <!-- Trust badges under phone -->
+        <div class="lp-phone-badges">
+          <div class="lp-phone-badge">🍎 iOS 15+</div>
+          <div class="lp-phone-badge">🤖 Android 8+</div>
+          <div class="lp-phone-badge">🔒 Privacy first</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ══════════════════════════════════════════════════════
+       PRICING
+  ═══════════════════════════════════════════════════════════ -->
+  <section class="lp-section lp-pricing" id="pricing">
+    <div class="lp-inner">
+
+      <div class="lp-section-header" data-reveal>
+        <div class="lp-eyebrow">💎 PRICING</div>
+        <h2>Simple, transparent pricing</h2>
+        <p>Start free. Upgrade when you're ready for more magic. Same price on web and mobile.</p>
+      </div>
+
+      <!-- Billing toggle -->
+      <div class="lp-toggle-wrap" data-reveal>
+        <span class="lp-ptoggle-label">Monthly</span>
+        <button class="lp-ptoggle" id="pricingToggle" role="switch" aria-checked="false" aria-label="Switch between monthly and annual billing">
+          <span class="lp-ptoggle-thumb"></span>
+        </button>
+        <span class="lp-ptoggle-label">Annual <span class="lp-save-pill">Save 20%</span></span>
+      </div>
+
+      <div class="lp-price-grid">
+
+        <!-- Free -->
+        <div class="lp-price-card" data-reveal>
+          <div class="lp-price-icon" aria-hidden="true">🌱</div>
+          <div class="lp-price-name">Free</div>
+          <div class="lp-price-amount"><sup>$</sup><span data-monthly="0" data-annual="0">0</span><sub>/mo</sub></div>
+          <div class="lp-price-sub">Forever free, no card needed</div>
+          <ul class="lp-price-features">
+            <li class="on">5 generations / day</li>
+            <li class="on">1024×1024 quality</li>
+            <li class="on">Text-to-chibi</li>
+            <li class="on">Community gallery</li>
+            <li class="off">Photo-to-chibi</li>
+            <li class="off">HD export</li>
+          </ul>
+          <a href="index.html" class="lp-btn lp-btn-outline lp-btn-full">Start Free on Web</a>
+          <a href="#download" class="lp-price-app-link">Or get the free app ↓</a>
+        </div>
+
+        <!-- Pro (featured) -->
+        <div class="lp-price-card lp-price-featured" data-reveal data-delay="80">
+          <div class="lp-popular-tag">⭐ Most Popular</div>
+          <div class="lp-price-icon" aria-hidden="true">⭐</div>
+          <div class="lp-price-name">Pro</div>
+          <div class="lp-price-amount"><sup>$</sup><span data-monthly="9.99" data-annual="7.99">9.99</span><sub>/mo</sub></div>
+          <div class="lp-price-sub" id="proSubLabel">Billed monthly</div>
+          <ul class="lp-price-features">
+            <li class="on">100 generations / day</li>
+            <li class="on">HD quality 2048×2048</li>
+            <li class="on">Photo-to-chibi</li>
+            <li class="on">All 6 styles &amp; backgrounds</li>
+            <li class="on">No watermarks</li>
+            <li class="off">Commercial license</li>
+          </ul>
+          <a href="index.html#pricing" class="lp-btn lp-btn-gold lp-btn-full">Upgrade to Pro ✨</a>
+          <a href="#download" class="lp-price-app-link">Available on mobile too ↓</a>
+        </div>
+
+        <!-- Studio -->
+        <div class="lp-price-card" data-reveal data-delay="160">
+          <div class="lp-price-icon" aria-hidden="true">🚀</div>
+          <div class="lp-price-name">Studio</div>
+          <div class="lp-price-amount"><sup>$</sup><span data-monthly="24.99" data-annual="19.99">24.99</span><sub>/mo</sub></div>
+          <div class="lp-price-sub" id="studioSubLabel">Billed monthly</div>
+          <ul class="lp-price-features">
+            <li class="on">Unlimited generations</li>
+            <li class="on">4K quality export</li>
+            <li class="on">Commercial license</li>
+            <li class="on">API access</li>
+            <li class="on">Custom style training</li>
+            <li class="on">Prompt marketplace</li>
+          </ul>
+          <a href="index.html#pricing" class="lp-btn lp-btn-outline lp-btn-full">Go Studio 🚀</a>
+          <a href="#download" class="lp-price-app-link">Available on mobile too ↓</a>
+        </div>
+
+      </div>
+
+      <!-- FAQ accordion -->
+      <div class="lp-faq-wrap" data-reveal>
+        <h3 class="lp-faq-title">Frequently asked questions</h3>
+        <div class="lp-faq-list">
+          <div class="lp-faq-item">
+            <button class="lp-faq-q" aria-expanded="false">Is the mobile app really free?</button>
+            <div class="lp-faq-body"><p>Yes! Download is completely free on both iOS and Android. The Free plan gives you 5 generations per day with no credit card. Upgrade any time to unlock HD export and photo-to-chibi.</p></div>
+          </div>
+          <div class="lp-faq-item">
+            <button class="lp-faq-q" aria-expanded="false">Is the mobile app the same as the web app?</button>
+            <div class="lp-faq-body"><p>The core AI is identical. The mobile app adds camera integration, push notifications, one-tap Camera Roll saving, offline gallery, and exclusive sticker packs not available on the web.</p></div>
+          </div>
+          <div class="lp-faq-item">
+            <button class="lp-faq-q" aria-expanded="false">What art styles are available?</button>
+            <div class="lp-faq-body"><p>Six styles: Polished Anime, Soft Watercolor, Pixel Art, 3D Render, Sticker Style, and Pastel Sketch. Pro and Studio plans unlock all styles; Free users can access Polished Anime and Soft Watercolor.</p></div>
+          </div>
+          <div class="lp-faq-item">
+            <button class="lp-faq-q" aria-expanded="false">Can I use my chibis commercially?</button>
+            <div class="lp-faq-body"><p>Studio plan includes full commercial license. Free and Pro chibis are for personal use only. See our Terms of Service for details.</p></div>
+          </div>
+          <div class="lp-faq-item">
+            <button class="lp-faq-q" aria-expanded="false">Is my photo data safe?</button>
+            <div class="lp-faq-body"><p>We take privacy seriously. Uploaded photos are processed in memory, never stored permanently, and never used to train our AI. Read our Privacy Policy for full details.</p></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ══════════════════════════════════════════════════════
+       TESTIMONIALS
+  ═══════════════════════════════════════════════════════════ -->
+  <section class="lp-section lp-testimonials">
+    <div class="lp-inner">
+
+      <div class="lp-section-header" data-reveal>
+        <div class="lp-eyebrow">💬 TESTIMONIALS</div>
+        <h2>Creators love Chibi Creator</h2>
+        <div class="lp-overall-rating">
+          <span class="lp-big-stars" aria-label="4.9 out of 5 stars">★★★★★</span>
+          <span><strong>4.9 / 5</strong> from 2,400+ reviews</span>
+        </div>
+      </div>
+
+      <div class="lp-testi-grid">
+        <div class="lp-testi" data-reveal>
+          <div class="lp-testi-stars" aria-label="5 stars">★★★★★</div>
+          <p>"I turned my whole friend group into chibi doctors for our residency graduation. The quality is insane — it actually looks like a professional artist drew them!"</p>
+          <div class="lp-testi-author">
+            <div class="lp-testi-av" style="background:linear-gradient(135deg,#FFB6C1,#FFD6C0)" aria-hidden="true">M</div>
+            <div><b>Mei L.</b><span>Medical Resident</span></div>
+          </div>
+        </div>
+        <div class="lp-testi" data-reveal data-delay="80">
+          <div class="lp-testi-stars" aria-label="5 stars">★★★★★</div>
+          <p>"As a content creator, I use Chibi Creator to make custom profile pics for my Discord. My community went wild. The photo-to-chibi feature is pure magic."</p>
+          <div class="lp-testi-author">
+            <div class="lp-testi-av" style="background:linear-gradient(135deg,#87CEEB,#B0D4FF)" aria-hidden="true">J</div>
+            <div><b>Jake R.</b><span>Discord Server Owner · 12K members</span></div>
+          </div>
+        </div>
+        <div class="lp-testi" data-reveal data-delay="160">
+          <div class="lp-testi-stars" aria-label="5 stars">★★★★★</div>
+          <p>"I'm a pastry chef and I made a chibi version of myself for my Instagram bio. My followers absolutely adore it. Got 3× more profile visits that week!"</p>
+          <div class="lp-testi-author">
+            <div class="lp-testi-av" style="background:linear-gradient(135deg,#F0C674,#FFE88A)" aria-hidden="true">S</div>
+            <div><b>Sophie K.</b><span>Pastry Chef &amp; Food Blogger</span></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ══════════════════════════════════════════════════════
+       FINAL CTA  ← Big closing push
+  ═══════════════════════════════════════════════════════════ -->
+  <section class="lp-final-cta" aria-label="Final call to action">
+    <div class="lp-fc-bg" aria-hidden="true"></div>
+    <div class="lp-fc-glow g1" aria-hidden="true"></div>
+    <div class="lp-fc-glow g2" aria-hidden="true"></div>
+
+    <div class="lp-inner lp-fc-inner" data-reveal>
+      <div class="lp-fc-sparkles" aria-hidden="true">✨ 🌟 💫 ⭐ ✨</div>
+
+      <h2 class="lp-fc-h2">Ready to create your first chibi?</h2>
+      <p class="lp-fc-sub">Join 12,000+ creators. Free forever. No credit card needed.</p>
+
+      <div class="lp-fc-btns">
+        <a href="#" class="lp-btn lp-btn-dark lp-btn-xl" data-store="ios">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.37 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z" fill="currentColor"/></svg>
+          Download for iOS
+        </a>
+        <a href="#" class="lp-btn lp-btn-gold lp-btn-xl" data-store="android">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3.18 23.76c.34.2.72.24 1.08.12L14.9 12 4.26.12A1.5 1.5 0 003.18.24C2.47.65 2 1.4 2 2.28v19.44c0 .88.47 1.63 1.18 2.04zM17.63 8.76L5.8.5l9.35 9.35 2.48-1.09zm0 6.48l-2.48-1.09L5.8 23.5l11.83-8.26zM20.5 10.5l-1.86-1.04-2.77 2.54 2.77 2.54 1.9-1.06c.54-.3.87-.86.87-1.48 0-.62-.35-1.2-.91-1.5z" fill="currentColor"/></svg>
+          Download for Android
+        </a>
+        <a href="index.html" class="lp-btn lp-btn-ghost lp-btn-xl">Use Web App Instead →</a>
+      </div>
+
+      <!-- Final trust strip -->
+      <div class="lp-fc-trust">
+        <span>🆓 Free plan forever</span>
+        <span>·</span>
+        <span>🔒 No data sold</span>
+        <span>·</span>
+        <span>📱 iOS &amp; Android</span>
+        <span>·</span>
+        <span>⭐ 4.9 App Store</span>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ══════════════════════════════════════════════════════
+       FOOTER
+  ═══════════════════════════════════════════════════════════ -->
+  <footer class="lp-footer">
+    <div class="lp-inner lp-footer-inner">
+
+      <!-- Brand column -->
+      <div class="lp-footer-brand">
+        <div class="lp-footer-logo">✨ Chibi Creator</div>
+        <p>The most delightful AI chibi character generator. Available on web, iOS &amp; Android.</p>
+        <div class="lp-footer-stores">
+          <a href="#" class="lp-footer-store-pill" data-store="ios">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.37 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z" fill="currentColor"/></svg>
+            App Store
+          </a>
+          <a href="#" class="lp-footer-store-pill" data-store="android">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3.18 23.76c.34.2.72.24 1.08.12L14.9 12 4.26.12A1.5 1.5 0 003.18.24C2.47.65 2 1.4 2 2.28v19.44c0 .88.47 1.63 1.18 2.04zM17.63 8.76L5.8.5l9.35 9.35 2.48-1.09zm0 6.48l-2.48-1.09L5.8 23.5l11.83-8.26zM20.5 10.5l-1.86-1.04-2.77 2.54 2.77 2.54 1.9-1.06c.54-.3.87-.86.87-1.48 0-.62-.35-1.2-.91-1.5z" fill="currentColor"/></svg>
+            Google Play
+          </a>
+        </div>
+        <!-- Newsletter -->
+        <form class="lp-footer-newsletter" id="newsletterForm" novalidate>
+          <input type="email" placeholder="Get updates · your@email.com" aria-label="Newsletter email" required />
+          <button type="submit" class="lp-btn lp-btn-peach" style="padding:10px 18px;font-size:13px">Subscribe</button>
+        </form>
+      </div>
+
+      <!-- Product links -->
+      <div class="lp-footer-col">
+        <div class="lp-footer-col-title">Product</div>
+        <a href="#features">Features</a>
+        <a href="#howit">How It Works</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#gallery">Gallery</a>
+        <a href="index.html">Web App</a>
+        <a href="#download">Mobile App</a>
+      </div>
+
+      <!-- Resources links -->
+      <div class="lp-footer-col">
+        <div class="lp-footer-col-title">Resources</div>
+        <a href="#">Getting Started</a>
+        <a href="#">Style Guide</a>
+        <a href="#">API Docs</a>
+        <a href="#">Blog</a>
+        <a href="#">Community</a>
+        <a href="#">Changelog</a>
+      </div>
+
+      <!-- Company links -->
+      <div class="lp-footer-col">
+        <div class="lp-footer-col-title">Company</div>
+        <a href="#">About Us</a>
+        <a href="#">Careers</a>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">Contact</a>
+        <a href="#">Press Kit</a>
+      </div>
+
+    </div>
+
+    <!-- Bottom bar -->
+    <div class="lp-footer-bottom">
+      <div class="lp-inner lp-footer-bottom-inner">
+        <span>Made with 💖 and AI · © 2025 Chibi Creator, Inc. · All rights reserved.</span>
+        <div class="lp-footer-socials">
+          <a href="#" title="Twitter / X" aria-label="Twitter">🐦</a>
+          <a href="#" title="Discord" aria-label="Discord">💬</a>
+          <a href="#" title="Instagram" aria-label="Instagram">📸</a>
+          <a href="#" title="TikTok" aria-label="TikTok">🎵</a>
+          <a href="#" title="YouTube" aria-label="YouTube">▶️</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+
+  <!-- ══════════════════════════════════════════════════════
+       STICKY APP BANNER (appears after scroll)
+  ═══════════════════════════════════════════════════════════ -->
+  <div class="lp-sticky-banner" id="lpStickyBanner" role="complementary" aria-label="Download app banner">
+    <div class="lp-sticky-inner">
+      <div class="lp-sticky-left">
+        <div class="lp-sticky-icon" aria-hidden="true">✨</div>
+        <div>
+          <div class="lp-sticky-title">Chibi Creator App</div>
+          <div class="lp-sticky-sub">Free · iOS &amp; Android</div>
+        </div>
+      </div>
+      <div class="lp-sticky-btns">
+        <a href="#" class="lp-sticky-store lp-sticky-ios" data-store="ios" aria-label="App Store">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.37 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z" fill="currentColor"/></svg>
+          App Store
+        </a>
+        <a href="#" class="lp-sticky-store lp-sticky-android" data-store="android" aria-label="Google Play">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3.18 23.76c.34.2.72.24 1.08.12L14.9 12 4.26.12A1.5 1.5 0 003.18.24C2.47.65 2 1.4 2 2.28v19.44c0 .88.47 1.63 1.18 2.04zM17.63 8.76L5.8.5l9.35 9.35 2.48-1.09zm0 6.48l-2.48-1.09L5.8 23.5l11.83-8.26zM20.5 10.5l-1.86-1.04-2.77 2.54 2.77 2.54 1.9-1.06c.54-.3.87-.86.87-1.48 0-.62-.35-1.2-.91-1.5z" fill="currentColor"/></svg>
+          Google Play
+        </a>
+        <button class="lp-sticky-close" id="lpStickyClose" aria-label="Dismiss banner">×</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/landing.js"></script>
+</body>
+</html>
