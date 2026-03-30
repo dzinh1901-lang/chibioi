@@ -5,21 +5,39 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>✨ Chibi Creator — AI Chibi Character Generator</title>
   <meta name="description" content="Transform anyone into an adorable chibi character with AI. Text prompts or photos — create magical anime-style characters in seconds." />
+  <meta name="theme-color" content="#FFB6C1" />
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://dzinh1901-lang.github.io/chibioi/" />
+  <meta property="og:title" content="✨ Chibi Creator — AI Chibi Character Generator" />
+  <meta property="og:description" content="Transform anyone into an adorable chibi character with AI. Text prompts or photos — create magical anime-style characters in seconds." />
+  <meta property="og:image" content="https://dzinh1901-lang.github.io/chibioi/og-image.png" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:url" content="https://dzinh1901-lang.github.io/chibioi/" />
+  <meta name="twitter:title" content="✨ Chibi Creator — AI Chibi Character Generator" />
+  <meta name="twitter:description" content="Transform anyone into an adorable chibi character with AI. Text prompts or photos — create magical anime-style characters in seconds." />
+  <meta name="twitter:image" content="https://dzinh1901-lang.github.io/chibioi/og-image.png" />
+
+  <!-- Favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✨</text></svg>" />
 
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
 
-  <!-- React + Babel -->
-  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
-  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <!-- React + Babel (production builds) -->
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
   <link rel="stylesheet" href="css/styles.css" />
 </head>
 <body>
-  <div id="root"></div>
+  <div id="root" role="main"></div>
   <script type="text/babel" src="js/app.js"></script>
 </body>
 </html>
