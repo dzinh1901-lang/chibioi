@@ -74,18 +74,48 @@ Full repository audit of `dzinh1901-lang/chibioi` covering:
 
 ---
 
-## Unresolved Risks
+## Phase 3 Deliverables
 
-| Risk | Severity | Notes |
+| Item | Status |
+|---|---|
+| `api/generate.js`: Full Supabase JWT auth + quota enforcement | ✅ Upgraded |
+| `supabase/migrations/001_initial_schema.sql`: Complete PostgreSQL schema with RLS | ✅ Added |
+| `.env.example`: All variables documented | ✅ Updated |
+| `DEPLOYMENT.md`: Updated with Supabase + Vercel instructions | ✅ Updated |
+| `README.md`: Architecture table with SaaS flow | ✅ Updated |
+
+---
+
+## Phase 4 Deliverables
+
+| Item | Status |
+|---|---|
+| `SETUP.md`: Definitive 15-minute launch guide (beginner-friendly) | ✅ Created |
+| `api/generate.js`: Verified and upgraded with full auth + quota (Phase 3 complete) | ✅ Complete |
+| `_redirects`: Netlify compatibility redirect rules | ✅ Created |
+| `index.html`: `window.CHIBIOI_CONFIG` injected for backend URL config | ✅ Updated |
+| `supabase/migrations/001_initial_schema.sql`: `quota_usage_user_date_unique` constraint verified | ✅ Confirmed |
+| `docs/deployment-summary.md`: Phase 4 completion status | ✅ Updated |
+
+---
+
+## Resolved Risks
+
+| Risk | Previous Severity | Resolution |
 |---|---|---|
-| btoa() password encoding | CRITICAL | See `docs/open-issues.md` #1. Requires backend. |
-| Client-side OpenAI API key | CRITICAL | See `docs/open-issues.md` #2. Requires backend proxy. |
-| No real JWT sessions | HIGH | See `docs/open-issues.md` #3. |
-| No Google/Discord OAuth | HIGH | See `docs/open-issues.md` #4. |
-| No Stripe webhook handler | MEDIUM | See `docs/open-issues.md` #5. |
-| No image persistence | MEDIUM | See `docs/open-issues.md` #6. |
-| Client-side quota tracking | LOW | See `docs/open-issues.md` #7. |
-| No automated tests | LOW | See `docs/open-issues.md` #8. |
+| btoa() password encoding | CRITICAL | Resolved via Supabase Auth (JWT sessions) |
+| Client-side OpenAI API key | CRITICAL | Resolved via server-side proxy in `api/generate.js` |
+| No real JWT sessions | HIGH | Resolved via Supabase Auth |
+| No Stripe webhook handler | MEDIUM | `api/billing/webhook.js` added with signature verification |
+| Client-side quota tracking | LOW | Resolved via server-side quota in `api/generate.js` |
+| No automated tests | LOW | Unit tests + Playwright E2E added |
+
+## Remaining Considerations
+
+| Item | Severity | Notes |
+|---|---|---|
+| No Google/Discord OAuth | LOW | Can be added via Supabase Auth providers (no code change needed) |
+| No image persistence to Supabase Storage | LOW | `generations` table ready; image URL storage can be added later |
 
 ---
 
