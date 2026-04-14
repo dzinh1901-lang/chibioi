@@ -1,3 +1,14 @@
+## ✅ RESOLVED
+
+### Issue #0 — No SQL Schema
+- **Severity**: HIGH (was)
+- **Affected files**: `supabase/migrations/`
+- **Problem**: No database schema existed; supabase directory was empty.
+- **Resolution**: Created `supabase/migrations/20260330000000_initial_schema.sql` with all tables, RLS policies, indexes, and triggers.
+- **Status**: ✅ RESOLVED
+
+---
+
 # Open Issues — Chibi Creator v4
 
 Last updated: 2026-03-30

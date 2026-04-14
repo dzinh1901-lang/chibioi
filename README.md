@@ -78,6 +78,14 @@ The key is stored in `localStorage` and never sent anywhere except directly to `
 - **Password visibility toggle** — 👁️ / 🙈 button
 - **Form validation** — Email regex, min 8-char password, confirm match, T&C checkbox
 
+### 🧙 Avatar Wizard (NEW)
+- **6-step guided workflow** — Gender → Hair & Eyes → Profession → Style → Customize → Generate
+- **12 profession presets** — Marching Band, Doctor, Pastry Chef, Engineer, Pilot, Sommelier, Scientist, Artist, Gamer, Student, Athlete, Casual
+- **Advanced prompt engineering** — Master template ensures correct chibi proportions (large head, big eyes, small body) every time
+- **Full style & background matrix** — 6 styles × 6 backgrounds × 2 sliders = thousands of combinations
+- **Integrated generation** — Uses the same DALL-E 3/2 backend as the main studio
+- **Gallery save** — Wizard-generated chibis save to gallery with full metadata
+
 ### ⚡ Quota System
 - **Guests** — 3 generations/day via `sessionStorage` (resets at midnight)
 - **FREE plan** — 5/day tracked in `quota_usage` table
@@ -207,8 +215,12 @@ PATCH  tables/generations/{id} Body: { outputImageUrl, status, downloads }
 | outputImageUrl | text | Result URL or "" |
 | status | text | PENDING / SUCCEEDED / DEMO |
 | downloads | number | Download count |
+| avatar_data | json | Avatar wizard step selections (NEW) |
 | createdAt | number | Unix ms |
 | updatedAt | number | Unix ms |
+
+### `generations` (updated)
+Added `avatar_data` JSONB column to store the wizard step selections alongside the generation record.
 
 ### `quota_usage`
 | Field | Type | Notes |

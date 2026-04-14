@@ -23,7 +23,9 @@
 
 **Goal**: Replace demo stubs with real backend services.
 
-- [ ] Connect Supabase database for users, galleries, quotas
+- [x] Connect Supabase database for users, galleries, quotas
+- [x] SQL schema created at supabase/migrations/20260330000000_initial_schema.sql
+- [x] Avatar Wizard (6-step) built into js/app.js
 - [ ] Implement Stripe webhook handler (`/api/billing/webhook`) for plan upgrades
 - [ ] Add S3 / Cloudflare R2 image storage (download + store generated images permanently)
 - [ ] Implement Google OAuth via Supabase Auth
